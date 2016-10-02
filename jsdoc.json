@@ -37,7 +37,138 @@
         "description": "Abstract driver",
         "parameters": [],
         "examples": []
-      }
+      },
+      "functions": [
+        {
+          "name": "connect",
+          "access": "",
+          "virtual": false,
+          "description": "Connect driver",
+          "parameters": [
+            {
+              "name": "args",
+              "type": "*",
+              "description": "Sequelize arguments",
+              "default": "",
+              "optional": "",
+              "nullable": ""
+            }
+          ],
+          "examples": [],
+          "returns": {
+            "type": "Promise",
+            "description": ""
+          }
+        },
+        {
+          "name": "create",
+          "access": "",
+          "virtual": false,
+          "description": "Create data with namepath",
+          "parameters": [
+            {
+              "name": "namepath",
+              "type": "string",
+              "description": "Namepath string",
+              "default": "",
+              "optional": "",
+              "nullable": ""
+            },
+            {
+              "name": "data",
+              "type": "Object",
+              "description": "Resource data to create",
+              "default": "",
+              "optional": "",
+              "nullable": ""
+            }
+          ],
+          "examples": [],
+          "returns": {
+            "type": "Promise",
+            "description": ""
+          }
+        },
+        {
+          "name": "read",
+          "access": "",
+          "virtual": false,
+          "description": "Read data with namepath",
+          "parameters": [
+            {
+              "name": "namepath",
+              "type": "string",
+              "description": "Namepath string",
+              "default": "",
+              "optional": "",
+              "nullable": ""
+            }
+          ],
+          "examples": [],
+          "returns": {
+            "type": "Promise",
+            "description": ""
+          }
+        },
+        {
+          "name": "update",
+          "access": "",
+          "virtual": false,
+          "description": "Update data with namepath",
+          "parameters": [
+            {
+              "name": "namepath",
+              "type": "string",
+              "description": "Namepath string",
+              "default": "",
+              "optional": "",
+              "nullable": ""
+            },
+            {
+              "name": "data",
+              "type": "Object",
+              "description": "Resource data to create",
+              "default": "",
+              "optional": "",
+              "nullable": ""
+            }
+          ],
+          "examples": [],
+          "returns": {
+            "type": "Promise",
+            "description": ""
+          }
+        },
+        {
+          "name": "delete",
+          "access": "",
+          "virtual": false,
+          "description": "Delete data with namepath",
+          "parameters": [
+            {
+              "name": "namepath",
+              "type": "string",
+              "description": "Namepath string",
+              "default": "",
+              "optional": "",
+              "nullable": ""
+            }
+          ],
+          "examples": [],
+          "returns": {
+            "type": "Promise",
+            "description": ""
+          }
+        },
+        {
+          "name": "assertConnected",
+          "access": "",
+          "virtual": false,
+          "description": "Assert that driver connected",
+          "parameters": [],
+          "examples": []
+        }
+      ]
     }
   ]
 }
