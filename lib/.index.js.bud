@@ -4,14 +4,19 @@
 
 'use strict'
 
-const { indexJsBud } = require('ape-tmpl')
-const { description, name } = require('../package.json')
+const pkg = require('../package.json')
+const { moduleIndex } = require('sg-templates')
 
-module.exports = indexJsBud({
-  desc: description,
-  module: name,
-  dirname: __dirname
-})
+module.exports = {
+  force: true,
+  mode: '444',
+  tmpl: moduleIndex,
+  data: {
+    name: 'SequelizeDriver',
+    sub: {},
+    pkg
+  }
+}
 
 if (!module.parent) {
   require('coz').render(__filename)

@@ -4,11 +4,13 @@
   "description": "Clay driver for Sequelize",
   "main": "lib",
   "scripts": {
-    "test": "./ci/test.js",
-    "prepublish": "./ci/build.js"
+    "test": "node ./ci/test.js",
+    "prepublish": "node ./ci/build.js && node ./ci/shim.js && node ./ci/doc.js"
   },
   "repository": "realglobe-Inc/clay-driver-sequelize",
-  "keywords": [],
+  "keywords": [
+    "claydb"
+  ],
   "author": {
     "name": "Taka Okunishi",
     "email": "okunishinishi@gmail.com",
@@ -20,22 +22,35 @@
   },
   "homepage": "https://github.com/realglobe-Inc/clay-driver-sequelize#readme",
   "dependencies": {
+    "abind": "^1.0.0",
     "clay-constants": "^0.3.7",
-    "co": "^4.6.0"
+    "clay-driver-base": "0.0.5",
+    "co": "^4.6.0",
+    "sequelize": "^3.24.3",
+    "json-pointer": "^0.5.0"
   },
   "devDependencies": {
-    "ape-releasing": "*",
-    "ape-reporting": "*",
-    "ape-tasking": "*",
-    "amocha": "*",
-    "ape-tmpl": "*",
-    "ape-updating": "*",
-    "ape-formatting": "*",
-    "coz": "*",
-    "injectmock": "*"
+    "ababel": "^1.1.10",
+    "ababel-es2015": "^1.0.8",
+    "amocha": "^1.0.15",
+    "ape-formatting": "^1.0.2",
+    "ape-releasing": "^4.0.4",
+    "ape-reporting": "^3.0.2",
+    "ape-tasking": "^4.0.9",
+    "ape-tmpl": "^5.0.19",
+    "ape-updating": "^4.0.5",
+    "coz": "^6.0.20",
+    "injectmock": "^2.0.0",
+    "sg-templates": "^1.2.2",
+    "sg-travis": "^1.1.33",
+    "sqlite3": "^3.1.4",
+    "writeout": "^2.1.0"
   },
   "engines": {
     "node": ">=6",
     "npm": ">=3"
+  },
+  "publishConfig": {
+    "registry": "https://realglobe.artifactoryonline.com/realglobe/api/npm/npm-local"
   }
 }

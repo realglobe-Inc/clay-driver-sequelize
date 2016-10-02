@@ -1,0 +1,43 @@
+{
+  "functions": [
+    {
+      "name": "create",
+      "access": "",
+      "virtual": false,
+      "description": "Create driver instance",
+      "parameters": [
+        {
+          "name": "args",
+          "type": "*",
+          "description": "",
+          "default": "",
+          "optional": "",
+          "nullable": ""
+        }
+      ],
+      "examples": [],
+      "returns": {
+        "type": "MemoryDriver",
+        "description": ""
+      }
+    }
+  ],
+  "classes": [
+    {
+      "name": "SequelizeDriver",
+      "description": "",
+      "extends": [
+        "Driver"
+      ],
+      "access": "",
+      "virtual": false,
+      "fires": "",
+      "constructor": {
+        "name": "SequelizeDriver",
+        "description": "Abstract driver",
+        "parameters": [],
+        "examples": []
+      }
+    }
+  ]
+}

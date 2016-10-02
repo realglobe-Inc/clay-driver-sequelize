@@ -111,6 +111,8 @@ This software is released under the [MIT License](https://github.com/realglobe-I
 Links
 ------
 
++ [sequelize][sequelize_url]
 
+[sequelize_url]: http://docs.sequelizejs.com/
 
 <!-- Links End -->
