@@ -1,0 +1,41 @@
+{
+  "name": "clay-driver-sequelize",
+  "version": "1.0.0",
+  "description": "Clay driver for Sequelize",
+  "main": "lib",
+  "scripts": {
+    "test": "./ci/test.js",
+    "prepublish": "./ci/build.js"
+  },
+  "repository": "realglobe-Inc/clay-driver-sequelize",
+  "keywords": [],
+  "author": {
+    "name": "Taka Okunishi",
+    "email": "okunishinishi@gmail.com",
+    "url": "http://okunishitaka.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/realglobe-Inc/clay-driver-sequelize/issues"
+  },
+  "homepage": "https://github.com/realglobe-Inc/clay-driver-sequelize#readme",
+  "dependencies": {
+    "clay-constants": "^0.3.7",
+    "co": "^4.6.0"
+  },
+  "devDependencies": {
+    "ape-releasing": "*",
+    "ape-reporting": "*",
+    "ape-tasking": "*",
+    "amocha": "*",
+    "ape-tmpl": "*",
+    "ape-updating": "*",
+    "ape-formatting": "*",
+    "coz": "*",
+    "injectmock": "*"
+  },
+  "engines": {
+    "node": ">=6",
+    "npm": ">=3"
+  }
+}
