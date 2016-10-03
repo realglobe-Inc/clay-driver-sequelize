@@ -41,6 +41,7 @@
     "ape-updating": "^4.0.5",
     "coz": "^6.0.20",
     "injectmock": "^2.0.0",
+    "rimraf": "^2.5.4",
     "sg-templates": "^1.2.2",
     "sg-travis": "^1.1.33",
     "sqlite3": "^3.1.4",
