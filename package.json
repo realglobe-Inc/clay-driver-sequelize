@@ -26,8 +26,7 @@
     "clay-constants": "^0.3.7",
     "clay-driver-base": "0.0.5",
     "co": "^4.6.0",
-    "sequelize": "^3.24.3",
-    "json-pointer": "^0.5.0"
+    "sequelize": "^3.24.3"
   },
   "devDependencies": {
     "ababel": "^1.1.10",

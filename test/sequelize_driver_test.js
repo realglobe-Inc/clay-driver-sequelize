@@ -32,6 +32,17 @@ describe('sequelize-driver', function () {
       value: { hoge: 'This is hoge' },
       at: new Date()
     })
+    {
+      let baz = yield driver.read('/foo/bar/baz')
+      assert.deepEqual(baz.value, { hoge: 'This is hoge' })
+    }
+    yield driver.update('/foo/bar/baz', {
+      value: { hoge: 'This is hoge2' }
+    })
+    {
+      let baz = yield driver.read('/foo/bar/baz')
+      assert.deepEqual(baz.value, { hoge: 'This is hoge2' })
+    }
     yield driver.disconnect()
   }))
 })
