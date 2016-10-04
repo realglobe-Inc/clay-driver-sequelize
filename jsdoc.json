@@ -17,7 +17,7 @@
       ],
       "examples": [],
       "returns": {
-        "type": "MemoryDriver",
+        "type": "SequelizeDriver",
         "description": ""
       }
     }

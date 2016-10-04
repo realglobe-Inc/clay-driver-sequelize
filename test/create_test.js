@@ -20,7 +20,8 @@ describe('create', function () {
   }))
 
   it('Create', () => co(function * () {
-
+    let created = create({})
+    assert.ok(created)
   }))
 })
 

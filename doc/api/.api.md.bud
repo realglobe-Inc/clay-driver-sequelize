@@ -30,13 +30,13 @@ module.exports = {
         [item.name]: wrapper(item)
       }), {})
       let classes = byName(jsdoc[ 'classes' ], { wrapper: asClass })
-      let { MemoryDriver } = classes
+      let { SequelizeDriver } = classes
 
       let functions = byName(jsdoc[ 'functions' ], { wrapper: asFunc })
       let { create } = functions
       return {
         classes: [
-          MemoryDriver
+          SequelizeDriver
         ].filter(Boolean),
         functions: [
           create
