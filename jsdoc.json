@@ -167,6 +167,56 @@
           "description": "Assert that driver connected",
           "parameters": [],
           "examples": []
+        },
+        {
+          "name": "defineRecord",
+          "access": "",
+          "virtual": false,
+          "description": "Define a record model",
+          "parameters": [
+            {
+              "name": "sequelize",
+              "type": "Sequelize",
+              "description": "A Sequelize instance.",
+              "default": "",
+              "optional": "",
+              "nullable": ""
+            }
+          ],
+          "examples": [],
+          "returns": {
+            "type": "Object",
+            "description": "- Record model definition."
+          }
+        },
+        {
+          "name": "recordAttributes",
+          "access": "",
+          "virtual": false,
+          "description": "Create attributes of a record instance",
+          "parameters": [
+            {
+              "name": "namepath",
+              "type": "string",
+              "description": "",
+              "default": "",
+              "optional": "",
+              "nullable": ""
+            },
+            {
+              "name": "data",
+              "type": "Object",
+              "description": "",
+              "default": "",
+              "optional": "",
+              "nullable": ""
+            }
+          ],
+          "examples": [],
+          "returns": {
+            "type": "Object",
+            "description": ""
+          }
         }
       ]
     }
