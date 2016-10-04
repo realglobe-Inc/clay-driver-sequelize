@@ -161,6 +161,35 @@
           }
         },
         {
+          "name": "cursor",
+          "access": "",
+          "virtual": false,
+          "description": "Get cursor to iterate",
+          "parameters": [
+            {
+              "name": "namepath",
+              "type": "string",
+              "description": "Namepath string",
+              "default": "",
+              "optional": "",
+              "nullable": ""
+            },
+            {
+              "name": "options",
+              "type": "Object",
+              "description": "Optional settings",
+              "default": "",
+              "optional": "",
+              "nullable": ""
+            }
+          ],
+          "examples": [],
+          "returns": {
+            "type": "Promise.<Driver.Cursor>",
+            "description": ""
+          }
+        },
+        {
           "name": "assertConnected",
           "access": "",
           "virtual": false,

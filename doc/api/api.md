@@ -11,6 +11,7 @@ Clay driver for Sequelize
   + [driver.read(namepath)](#clay-driver-sequelize-classes-sequelize-driver-read)
   + [driver.update(namepath, data)](#clay-driver-sequelize-classes-sequelize-driver-update)
   + [driver.delete(namepath)](#clay-driver-sequelize-classes-sequelize-driver-delete)
+  + [driver.cursor(namepath, options)](#clay-driver-sequelize-classes-sequelize-driver-cursor)
   + [driver.assertConnected()](#clay-driver-sequelize-classes-sequelize-driver-assertConnected)
   + [driver.defineRecord(sequelize)](#clay-driver-sequelize-classes-sequelize-driver-defineRecord)
   + [driver.recordAttributes(namepath, data)](#clay-driver-sequelize-classes-sequelize-driver-recordAttributes)
@@ -99,6 +100,18 @@ Delete data with namepath
 | Param | Type | Description |
 | ----- | --- | -------- |
 | namepath | string | Namepath string |
+
+
+<a class='md-heading-link' name="clay-driver-sequelize-classes-sequelize-driver-cursor" ></a>
+
+### driver.cursor(namepath, options) -> `Promise.<Driver.Cursor>`
+
+Get cursor to iterate
+
+| Param | Type | Description |
+| ----- | --- | -------- |
+| namepath | string | Namepath string |
+| options | Object | Optional settings |
 
 
 <a class='md-heading-link' name="clay-driver-sequelize-classes-sequelize-driver-assertConnected" ></a>
