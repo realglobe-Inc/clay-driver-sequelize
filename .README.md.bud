@@ -12,19 +12,19 @@ module.exports = readmeMdBud({
   repo: pkg.repository,
   sections: 'doc/guides/*.md.hbs',
   badges: {
+    // TODO OSS
+    // travis: true,
     travisCom: true,
     travisComToken: 'aeFzCpBZebyaRijpCFmm',
-    codeclimate: false,
-    codeclimateCoverage: false,
-    gemnasium: false,
     npm: true,
     standard: true
   },
   overview: 'doc/overview.md',
   links: require('./doc/links'),
-  vars: {}
+  vars: {
+    values: require('./lib')
+  }
 })
-
 
 if (!module.parent) {
   require('coz').render(__filename)

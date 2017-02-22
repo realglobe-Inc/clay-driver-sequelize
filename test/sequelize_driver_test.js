@@ -6,14 +6,18 @@
 
 const SequelizeDriver = require('../lib/sequelize_driver.js')
 const assert = require('assert')
-const rimraf = require('rimraf')
+const path = require('path')
+const mkdirp = require('mkdirp')
+
 const co = require('co')
 
 describe('sequelize-driver', function () {
   this.timeout(3000)
+  let db
+  let storage = `${__dirname}/../tmp/testing-driver.db`
 
   before(() => co(function * () {
-
+    mkdirp.sync(path.dirname(storage))
   }))
 
   after(() => co(function * () {
@@ -21,34 +25,20 @@ describe('sequelize-driver', function () {
   }))
 
   it('Sequelize driver', () => co(function * () {
-    rimraf.sync(`${__dirname}/../tmp/testing-db-01.db`)
-    let driver = new SequelizeDriver()
-    yield driver.connect({
-      dialect: 'sqlite',
-      storage: `${__dirname}/../tmp/testing-db-01.db`
+    let driver = new SequelizeDriver('hoge', '', '', {
+      storage,
+      dialect: 'sqlite'
     })
-    yield driver.create('/foo/bar/baz', {
-      key: 'baz',
-      value: { hoge: 'This is hoge' },
-      at: new Date()
+    let created = yield driver.create('users', {
+      username: 'okunishinishi'
     })
-    {
-      let baz = yield driver.read('/foo/bar/baz')
-      assert.deepEqual(baz.value, { hoge: 'This is hoge' })
-    }
-    {
-      let bar = yield driver.read('/foo/bar')
-      assert.deepEqual(bar.baz.value, { hoge: 'This is hoge' })
-    }
-    yield driver.update('/foo/bar/baz', {
-      value: { hoge: 'This is hoge2' }
+    assert.ok(created)
+    assert.ok(created.id)
+    let created2 = yield driver.create('users', {
+      username: 'hoge'
     })
-    {
-      let baz = yield driver.read('/foo/bar/baz')
-      assert.deepEqual(baz.value, { hoge: 'This is hoge2' })
-    }
-    yield driver.delete('/foo/bar/baz')
-    yield driver.disconnect()
+    assert.ok(created2.id !== created.id)
+    assert.equal(created.username, 'okunishinishi')
   }))
 })
 
