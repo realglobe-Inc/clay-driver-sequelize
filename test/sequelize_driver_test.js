@@ -35,10 +35,16 @@ describe('sequelize-driver', function () {
     assert.ok(created)
     assert.ok(created.id)
     let created2 = yield driver.create('users', {
-      username: 'hoge'
+      username: 'hoge',
+      birthday: new Date('1985/08/26')
     })
     assert.ok(created2.id !== created.id)
     assert.equal(created.username, 'okunishinishi')
+
+    let list = yield driver.list('users')
+    assert.ok(list.meta)
+    assert.ok(list.meta)
+    console.log('user', list.meta)
   }))
 })
 
