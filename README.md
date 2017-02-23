@@ -102,7 +102,7 @@ Clay driver for Sequelize
 
 + Functions
   + [create(args)](#clay-driver-sequelize-function-create)
-+ [SequelizeDriver](clay-driver-sequelize-classes) Class
++ [`SequelizeDriver`](clay-driver-sequelize-classes) Class
   + [new SequelizeDriver()](#clay-driver-sequelize-classes-sequelize-driver-constructor)
   + [driver.one()](#clay-driver-sequelize-classes-sequelize-driver-one)
   + [driver.list()](#clay-driver-sequelize-classes-sequelize-driver-list)
@@ -126,9 +126,14 @@ Create driver instance
 
 <a class='md-heading-link' name="clay-driver-sequelize-classes"></a>
 
-## SequelizeDriver Class
+## `SequelizeDriver` Class
 
 Abstract driver
+
+**Extends**: 
+
++ `Driver`
+
 
 
 <a class='md-heading-link' name="clay-driver-sequelize-classes-sequelize-driver-constructor" ></a>

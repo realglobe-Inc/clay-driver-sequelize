@@ -27,7 +27,8 @@ describe('sequelize-driver', function () {
   it('Sequelize driver', () => co(function * () {
     let driver = new SequelizeDriver('hoge', '', '', {
       storage,
-      dialect: 'sqlite'
+      dialect: 'sqlite',
+      logging: true
     })
     let created = yield driver.create('users', {
       username: 'okunishinishi'
@@ -38,13 +39,29 @@ describe('sequelize-driver', function () {
       username: 'hoge',
       birthday: new Date('1985/08/26')
     })
+
+    let created3 = yield driver.create('users', {
+      username: 'foge',
+      birthday: new Date('1985/08/26')
+    })
     assert.ok(created2.id !== created.id)
     assert.equal(created.username, 'okunishinishi')
 
-    let list = yield driver.list('users')
-    assert.ok(list.meta)
-    assert.ok(list.meta)
-    console.log('user', list.meta)
+    {
+      let list01 = yield driver.list('users', {
+        filter: {}
+      })
+      assert.ok(list01.meta)
+      assert.deepEqual(list01.meta, { offset: 0, limit: 100, total: 3, length: 3 })
+
+      let list02 = yield driver.list('users', {
+        filter: { username: 'okunishinishi' }
+      })
+      assert.ok(list02.meta)
+      assert.deepEqual(list02.meta, { offset: 0, limit: 100, total: 1, length: 1 })
+    }
+
+    yield driver.drop('users')
   }))
 })
 
