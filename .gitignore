@@ -31,3 +31,5 @@ node_modules
 tmp
 
 shim/browser
+
+.npmrc

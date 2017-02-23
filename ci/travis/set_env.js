@@ -6,6 +6,11 @@
 
 process.chdir(`${__dirname}/../..`)
 
-const { setEnv } = require('sg-travis')
+const { setEnv } = require('sugos-travis')
+const { PublicRepo, PrivateRepo } = setEnv.presets
 
-setEnv({})
+setEnv({
+  // TODO OSS
+  // values: PublicRepo,
+  values: PrivateRepo
+})

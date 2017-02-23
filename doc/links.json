@@ -1,3 +1,5 @@
 {
-  "sequelize": "http://docs.sequelizejs.com/"
+  "ClayDB": "https://github.com/realglobe-Inc/claydb",
+  "Realglobe, Inc.": "http://realglobe.jp",
+  "Sequelize": "http://docs.sequelizejs.com/"
 }

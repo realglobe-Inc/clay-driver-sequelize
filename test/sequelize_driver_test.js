@@ -6,14 +6,18 @@
 
 const SequelizeDriver = require('../lib/sequelize_driver.js')
 const assert = require('assert')
-const rimraf = require('rimraf')
+const path = require('path')
+const mkdirp = require('mkdirp')
+
 const co = require('co')
 
 describe('sequelize-driver', function () {
   this.timeout(3000)
+  let db
+  let storage = `${__dirname}/../tmp/testing-driver.db`
 
   before(() => co(function * () {
-
+    mkdirp.sync(path.dirname(storage))
   }))
 
   after(() => co(function * () {
@@ -21,34 +25,47 @@ describe('sequelize-driver', function () {
   }))
 
   it('Sequelize driver', () => co(function * () {
-    rimraf.sync(`${__dirname}/../tmp/testing-db-01.db`)
-    let driver = new SequelizeDriver()
-    yield driver.connect({
+    let driver = new SequelizeDriver('hoge', '', '', {
+      storage,
       dialect: 'sqlite',
-      storage: `${__dirname}/../tmp/testing-db-01.db`
+      logging: true
     })
-    yield driver.create('/foo/bar/baz', {
-      key: 'baz',
-      value: { hoge: 'This is hoge' },
-      at: new Date()
+    let created = yield driver.create('users', {
+      username: 'okunishinishi'
     })
-    {
-      let baz = yield driver.read('/foo/bar/baz')
-      assert.deepEqual(baz.value, { hoge: 'This is hoge' })
-    }
-    {
-      let bar = yield driver.read('/foo/bar')
-      assert.deepEqual(bar.baz.value, { hoge: 'This is hoge' })
-    }
-    yield driver.update('/foo/bar/baz', {
-      value: { hoge: 'This is hoge2' }
+    assert.ok(created)
+    assert.ok(created.id)
+    let created2 = yield driver.create('users', {
+      username: 'hoge',
+      birthday: new Date('1985/08/26')
     })
+
+    let created3 = yield driver.create('users', {
+      username: 'foge',
+      birthday: new Date('1985/08/26')
+    })
+    assert.ok(created2.id !== created.id)
+    assert.equal(created.username, 'okunishinishi')
+
     {
-      let baz = yield driver.read('/foo/bar/baz')
-      assert.deepEqual(baz.value, { hoge: 'This is hoge2' })
+      let list01 = yield driver.list('users', {
+        filter: {}
+      })
+      assert.ok(list01.meta)
+      assert.deepEqual(list01.meta, { offset: 0, limit: 100, total: 3, length: 3 })
+
+      let list02 = yield driver.list('users', {
+        filter: { username: 'okunishinishi' }
+      })
+      assert.ok(list02.meta)
+      assert.deepEqual(list02.meta, { offset: 0, limit: 100, total: 1, length: 1 })
     }
-    yield driver.delete('/foo/bar/baz')
-    yield driver.disconnect()
+
+    yield driver.update('users', created2.id, { username: 'hogehoge' })
+
+    yield driver.destroy('users', created3.id)
+
+    yield driver.drop('users')
   }))
 })
 

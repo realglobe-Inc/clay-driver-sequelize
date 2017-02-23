@@ -20,7 +20,9 @@ describe('create', function () {
   }))
 
   it('Create', () => co(function * () {
-    let created = create({})
+    let created = create('', '', '', {
+      dialect: 'sqlite'
+    })
     assert.ok(created)
   }))
 })
