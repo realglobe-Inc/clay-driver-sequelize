@@ -61,6 +61,10 @@ describe('sequelize-driver', function () {
       assert.deepEqual(list02.meta, { offset: 0, limit: 100, total: 1, length: 1 })
     }
 
+    yield driver.update('users', created2.id, { username: 'hogehoge' })
+
+    yield driver.destroy('users', created3.id)
+
     yield driver.drop('users')
   }))
 })
