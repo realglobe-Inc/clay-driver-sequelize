@@ -78,6 +78,14 @@
           "description": "",
           "parameters": [],
           "examples": []
+        },
+        {
+          "name": "drop",
+          "access": "",
+          "virtual": false,
+          "description": "",
+          "parameters": [],
+          "examples": []
         }
       ]
     }

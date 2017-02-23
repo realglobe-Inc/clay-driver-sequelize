@@ -11,6 +11,7 @@ Clay driver for Sequelize
   + [driver.create()](#clay-driver-sequelize-classes-sequelize-driver-create)
   + [driver.update()](#clay-driver-sequelize-classes-sequelize-driver-update)
   + [driver.destroy()](#clay-driver-sequelize-classes-sequelize-driver-destroy)
+  + [driver.drop()](#clay-driver-sequelize-classes-sequelize-driver-drop)
 
 ## Functions
 
@@ -73,6 +74,12 @@ Constructor of SequelizeDriver class
 <a class='md-heading-link' name="clay-driver-sequelize-classes-sequelize-driver-destroy" ></a>
 
 ### driver.destroy()
+
+
+
+<a class='md-heading-link' name="clay-driver-sequelize-classes-sequelize-driver-drop" ></a>
+
+### driver.drop()
 
 
 
