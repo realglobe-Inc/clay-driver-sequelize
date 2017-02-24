@@ -86,6 +86,14 @@
           "description": "",
           "parameters": [],
           "examples": []
+        },
+        {
+          "name": "resources",
+          "access": "",
+          "virtual": false,
+          "description": "",
+          "parameters": [],
+          "examples": []
         }
       ]
     }

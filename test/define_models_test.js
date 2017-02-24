@@ -34,10 +34,10 @@ describe('define-models', function () {
 
   it('Define models', () => co(function * () {
     const { Resource } = db.models
-    let fooResource01 = yield Resource.ofNamespace('foo')
-    assert.equal(fooResource01.namespace, 'foo')
-    let fooResource02 = yield Resource.ofNamespace('foo')
-    assert.equal(fooResource02.namespace, 'foo')
+    let fooResource01 = yield Resource.ofName('foo')
+    assert.equal(fooResource01.name, 'foo')
+    let fooResource02 = yield Resource.ofName('foo')
+    assert.equal(fooResource02.name, 'foo')
     assert.equal(fooResource01.id, fooResource02.id)
   }))
 })

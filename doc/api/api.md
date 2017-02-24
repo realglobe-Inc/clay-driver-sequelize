@@ -1,10 +1,10 @@
-# clay-driver-sequelize@2.0.0
+# clay-driver-sequelize@2.0.1
 
 Clay driver for Sequelize
 
 + Functions
   + [create(args)](#clay-driver-sequelize-function-create)
-+ [`SequelizeDriver`](clay-driver-sequelize-classes) Class
++ [`SequelizeDriver`](#clay-driver-sequelize-classes) Class
   + [new SequelizeDriver()](#clay-driver-sequelize-classes-sequelize-driver-constructor)
   + [driver.one()](#clay-driver-sequelize-classes-sequelize-driver-one)
   + [driver.list()](#clay-driver-sequelize-classes-sequelize-driver-list)
@@ -12,6 +12,7 @@ Clay driver for Sequelize
   + [driver.update()](#clay-driver-sequelize-classes-sequelize-driver-update)
   + [driver.destroy()](#clay-driver-sequelize-classes-sequelize-driver-destroy)
   + [driver.drop()](#clay-driver-sequelize-classes-sequelize-driver-drop)
+  + [driver.resources()](#clay-driver-sequelize-classes-sequelize-driver-resources)
 
 ## Functions
 
@@ -80,6 +81,12 @@ Constructor of SequelizeDriver class
 <a class='md-heading-link' name="clay-driver-sequelize-classes-sequelize-driver-drop" ></a>
 
 ### driver.drop()
+
+
+
+<a class='md-heading-link' name="clay-driver-sequelize-classes-sequelize-driver-resources" ></a>
+
+### driver.resources()
 
 
 
