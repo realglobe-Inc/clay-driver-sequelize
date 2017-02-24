@@ -29,6 +29,7 @@
     "clay-entity": "^1.0.1",
     "clay-id": "^1.1.4",
     "clay-list-pager": "^1.1.1",
+    "clay-serial": "^1.1.1",
     "co": "^4.6.0",
     "sequelize": "^3.30.2"
   },
@@ -41,6 +42,7 @@
     "ape-tasking": "^4.0.9",
     "ape-tmpl": "^5.0.20",
     "ape-updating": "^4.1.0",
+    "clay-driver-tests": "^1.1.1",
     "coz": "^6.0.20",
     "injectmock": "^2.0.0",
     "mkdirp": "^0.5.1",

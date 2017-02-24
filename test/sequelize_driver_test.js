@@ -5,6 +5,7 @@
 'use strict'
 
 const SequelizeDriver = require('../lib/sequelize_driver.js')
+const clayDriverTests = require('clay-driver-tests')
 const { ok, equal, deepEqual } = require('assert')
 const path = require('path')
 const mkdirp = require('mkdirp')
@@ -14,10 +15,12 @@ const co = require('co')
 describe('sequelize-driver', function () {
   this.timeout(3000)
   let db
-  let storage = `${__dirname}/../tmp/testing-driver.db`
+  let storage01 = `${__dirname}/../tmp/testing-driver.db`
+  let storage02 = `${__dirname}/../tmp/testing-driver-2.db`
 
   before(() => co(function * () {
-    mkdirp.sync(path.dirname(storage))
+    mkdirp.sync(path.dirname(storage01))
+    mkdirp.sync(path.dirname(storage02))
   }))
 
   after(() => co(function * () {
@@ -26,7 +29,7 @@ describe('sequelize-driver', function () {
 
   it('Sequelize driver', () => co(function * () {
     let driver = new SequelizeDriver('hoge', '', '', {
-      storage,
+      storage: storage01,
       dialect: 'sqlite',
       logging: true
     })
@@ -69,6 +72,7 @@ describe('sequelize-driver', function () {
     yield driver.drop('users')
     deepEqual(yield driver.resources(), [])
   }))
+
 })
 
 /* global describe, before, after, it */
