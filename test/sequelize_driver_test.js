@@ -5,7 +5,7 @@
 'use strict'
 
 const SequelizeDriver = require('../lib/sequelize_driver.js')
-const assert = require('assert')
+const { ok, equal, deepEqual } = require('assert')
 const path = require('path')
 const mkdirp = require('mkdirp')
 
@@ -33,8 +33,8 @@ describe('sequelize-driver', function () {
     let created = yield driver.create('users', {
       username: 'okunishinishi'
     })
-    assert.ok(created)
-    assert.ok(created.id)
+    ok(created)
+    ok(created.id)
     let created2 = yield driver.create('users', {
       username: 'hoge',
       birthday: new Date('1985/08/26')
@@ -44,28 +44,30 @@ describe('sequelize-driver', function () {
       username: 'foge',
       birthday: new Date('1985/08/26')
     })
-    assert.ok(created2.id !== created.id)
-    assert.equal(created.username, 'okunishinishi')
+    ok(created2.id !== created.id)
+    equal(created.username, 'okunishinishi')
 
     {
       let list01 = yield driver.list('users', {
         filter: {}
       })
-      assert.ok(list01.meta)
-      assert.deepEqual(list01.meta, { offset: 0, limit: 100, total: 3, length: 3 })
+      ok(list01.meta)
+      deepEqual(list01.meta, { offset: 0, limit: 100, total: 3, length: 3 })
 
       let list02 = yield driver.list('users', {
         filter: { username: 'okunishinishi' }
       })
-      assert.ok(list02.meta)
-      assert.deepEqual(list02.meta, { offset: 0, limit: 100, total: 1, length: 1 })
+      ok(list02.meta)
+      deepEqual(list02.meta, { offset: 0, limit: 100, total: 1, length: 1 })
     }
 
     yield driver.update('users', created2.id, { username: 'hogehoge' })
 
     yield driver.destroy('users', created3.id)
 
+    deepEqual(yield driver.resources(), [ { name: 'users', version: 'latest' } ])
     yield driver.drop('users')
+    deepEqual(yield driver.resources(), [])
   }))
 })
 
