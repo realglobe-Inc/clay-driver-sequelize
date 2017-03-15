@@ -5,8 +5,10 @@
 'use strict'
 
 const SequelizeDriver = require('../lib/sequelize_driver.js')
+const { SqliteDriver } = require('clay-driver-sqlite')
 const clayDriverTests = require('clay-driver-tests')
-const { ok, equal, deepEqual } = require('assert')
+const { clayLump } = require('clay-lump')
+const { ok, equal, deepEqual, strictEqual } = require('assert')
 const path = require('path')
 const mkdirp = require('mkdirp')
 
@@ -73,6 +75,23 @@ describe('sequelize-driver', function () {
     deepEqual(yield driver.resources(), [])
 
     yield driver.drop('__invalid_resource_name__')
+  }))
+
+// https://github.com/realglobe-Inc/clay-driver-sqlite/issues/5
+  it('sqlite/issues/5', () => co(function * () {
+    const lump = clayLump('hec-eye-alpha', {
+      driver: new SqliteDriver(`${__dirname}/../tmp/test-sqlite-issues-5.db`, {
+        logging: false
+      })
+    })
+    let User = lump.resource('user')
+    yield User.drop()
+    yield User.create({ name: 'hoge' })
+    let user = yield User.first({ name: 'hoge' })
+    let destroyed = yield User.destroy(user.id)
+    equal(destroyed, 1)
+    let mustBeNull = yield User.first({ name: 'hoge' })
+    strictEqual(mustBeNull, null)
   }))
 })
 
