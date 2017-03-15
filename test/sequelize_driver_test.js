@@ -71,8 +71,9 @@ describe('sequelize-driver', function () {
     deepEqual(yield driver.resources(), [ { name: 'users', version: 'latest' } ])
     yield driver.drop('users')
     deepEqual(yield driver.resources(), [])
-  }))
 
+    yield driver.drop('__invalid_resource_name__')
+  }))
 })
 
 /* global describe, before, after, it */
