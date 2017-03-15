@@ -5,12 +5,12 @@
 'use strict'
 
 const SequelizeDriver = require('../lib/sequelize_driver.js')
-const { SqliteDriver } = require('clay-driver-sqlite')
 const clayDriverTests = require('clay-driver-tests')
-const { clayLump } = require('clay-lump')
+const clayLump = require('clay-lump')
 const { ok, equal, deepEqual, strictEqual } = require('assert')
 const path = require('path')
 const mkdirp = require('mkdirp')
+const rimraf = require('rimraf')
 
 const co = require('co')
 
@@ -19,10 +19,15 @@ describe('sequelize-driver', function () {
   let db
   let storage01 = `${__dirname}/../tmp/testing-driver.db`
   let storage02 = `${__dirname}/../tmp/testing-driver-2.db`
+  let storage03 = `${__dirname}/../tmp/testing-driver-3.db`
 
   before(() => co(function * () {
+    rimraf.sync(storage01)
+    rimraf.sync(storage02)
+    rimraf.sync(storage03)
     mkdirp.sync(path.dirname(storage01))
     mkdirp.sync(path.dirname(storage02))
+    mkdirp.sync(path.dirname(storage03))
   }))
 
   after(() => co(function * () {
@@ -40,6 +45,9 @@ describe('sequelize-driver', function () {
     })
     ok(created)
     ok(created.id)
+    let one = yield driver.one('users', created.id)
+    equal(String(one.id), String(created.id))
+
     let created2 = yield driver.create('users', {
       username: 'hoge',
       birthday: new Date('1985/08/26')
@@ -56,6 +64,7 @@ describe('sequelize-driver', function () {
       let list01 = yield driver.list('users', {
         filter: {}
       })
+      equal(String(list01.entities[ 0 ].id), String(created.id))
       ok(list01.meta)
       deepEqual(list01.meta, { offset: 0, limit: 100, total: 3, length: 3 })
 
@@ -80,18 +89,20 @@ describe('sequelize-driver', function () {
 // https://github.com/realglobe-Inc/clay-driver-sqlite/issues/5
   it('sqlite/issues/5', () => co(function * () {
     const lump = clayLump('hec-eye-alpha', {
-      driver: new SqliteDriver(`${__dirname}/../tmp/test-sqlite-issues-5.db`, {
-        logging: false
+      driver: new SequelizeDriver('hogehoge', '', '', {
+        storage: storage03,
+        dialect: 'sqlite',
+        logging: true
       })
     })
     let User = lump.resource('user')
     yield User.drop()
-    yield User.create({ name: 'hoge' })
-    let user = yield User.first({ name: 'hoge' })
-    let destroyed = yield User.destroy(user.id)
+    let created = yield User.create({ name: 'hoge' })
+    let found = yield User.first({ name: 'hoge' })
+    let destroyed = yield User.destroy(found.id)
     equal(destroyed, 1)
     let mustBeNull = yield User.first({ name: 'hoge' })
-    strictEqual(mustBeNull, null)
+    ok(!mustBeNull)
   }))
 })
 
