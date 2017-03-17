@@ -38,7 +38,8 @@ describe('sequelize-driver', function () {
     let driver = new SequelizeDriver('hoge', '', '', {
       storage: storage01,
       dialect: 'sqlite',
-      logging: true
+      benchmark: true,
+      logging: console.log
     })
     let created = yield driver.create('users', {
       username: 'okunishinishi',
