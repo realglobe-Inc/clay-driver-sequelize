@@ -132,7 +132,7 @@ Create driver instance
 
 Abstract driver
 
-**Extends**: 
+**Extends**:
 
 + `Driver`
 
