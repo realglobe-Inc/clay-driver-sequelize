@@ -150,14 +150,14 @@ describe('sequelize-driver', function () {
 
     {
       let people = yield Person.list({ filter: { pid: 1 }, sort: [ 'age' ] })
-      console.log(people.entities.map(p => p.age))
-      // => [ 2, 1, 3 ]
+      let ages = people.entities.map(p => p.age)
+      deepEqual(ages, [ 1, 2, 3 ])
     }
 
     {
       let people = yield Person.list({ filter: { pid: 1 }, sort: [ '-age' ] })
-      console.log(people.entities.map(p => p.age))
-      // => [ 3, 1, 2 ]
+      let ages = people.entities.map(p => p.age)
+      deepEqual(ages, [ 3, 2, 1 ])
     }
   }))
 })
