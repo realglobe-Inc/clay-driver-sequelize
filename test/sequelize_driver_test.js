@@ -120,6 +120,7 @@ describe('sequelize-driver', function () {
     ok(!mustBeNull)
   }))
 
+  // https://github.com/realglobe-Inc/clay-resource/issues/28
   it('issues/28', () => co(function * () {
     const lump = clayLump('issue-28-lump', {
       driver: new SequelizeDriver('hoge', '', '', {
