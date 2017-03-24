@@ -87,7 +87,7 @@ describe('sequelize-driver', function () {
       let list04 = yield driver.list('users', {
         sort: [ '-birthday' ]
       })
-      equal(list04.entities[ 0 ].username, 'okunishinishi')
+      equal(list04.entities[ 0 ].username, 'hoge')
     }
 
     yield driver.update('users', created2.id, { username: 'hogehoge' })
