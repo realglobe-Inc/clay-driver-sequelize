@@ -96,21 +96,21 @@ const { SequelizeDriver } = require('clay-driver-sequelize')
 API
 ---------
 
-# clay-driver-sequelize@2.0.9
+# clay-driver-sequelize@2.0.11
 
 Clay driver for Sequelize
 
 + Functions
   + [create(args)](#clay-driver-sequelize-function-create)
-+ [`SequelizeDriver`](#clay-driver-sequelize-classes) Class
-  + [new SequelizeDriver()](#clay-driver-sequelize-classes-sequelize-driver-constructor)
-  + [driver.one(resourceName, id)](#clay-driver-sequelize-classes-sequelize-driver-one)
-  + [driver.list(resourceName, condition)](#clay-driver-sequelize-classes-sequelize-driver-list)
-  + [driver.create(resourceName, attributes)](#clay-driver-sequelize-classes-sequelize-driver-create)
-  + [driver.update(resourceName, id, attributes)](#clay-driver-sequelize-classes-sequelize-driver-update)
-  + [driver.destroy(resourceName, id)](#clay-driver-sequelize-classes-sequelize-driver-destroy)
-  + [driver.drop(resourceName)](#clay-driver-sequelize-classes-sequelize-driver-drop)
-  + [driver.resources()](#clay-driver-sequelize-classes-sequelize-driver-resources)
++ [`SequelizeDriver`](#clay-driver-sequelize-class) Class
+  + [new SequelizeDriver()](#clay-driver-sequelize-class-sequelize-driver-constructor)
+  + [driver.one(resourceName, id)](#clay-driver-sequelize-class-sequelize-driver-one)
+  + [driver.list(resourceName, condition)](#clay-driver-sequelize-class-sequelize-driver-list)
+  + [driver.create(resourceName, attributes)](#clay-driver-sequelize-class-sequelize-driver-create)
+  + [driver.update(resourceName, id, attributes)](#clay-driver-sequelize-class-sequelize-driver-update)
+  + [driver.destroy(resourceName, id)](#clay-driver-sequelize-class-sequelize-driver-destroy)
+  + [driver.drop(resourceName)](#clay-driver-sequelize-class-sequelize-driver-drop)
+  + [driver.resources()](#clay-driver-sequelize-class-sequelize-driver-resources)
 
 ## Functions
 
@@ -126,7 +126,7 @@ Create driver instance
 
 
 
-<a class='md-heading-link' name="clay-driver-sequelize-classes"></a>
+<a class='md-heading-link' name="clay-driver-sequelize-class"></a>
 
 ## `SequelizeDriver` Class
 
@@ -138,7 +138,7 @@ Abstract driver
 
 
 
-<a class='md-heading-link' name="clay-driver-sequelize-classes-sequelize-driver-constructor" ></a>
+<a class='md-heading-link' name="clay-driver-sequelize-class-sequelize-driver-constructor" ></a>
 
 ### new SequelizeDriver()
 
@@ -146,7 +146,7 @@ Constructor of SequelizeDriver class
 
 
 
-<a class='md-heading-link' name="clay-driver-sequelize-classes-sequelize-driver-one" ></a>
+<a class='md-heading-link' name="clay-driver-sequelize-class-sequelize-driver-one" ></a>
 
 ### driver.one(resourceName, id) -> `Promise.<ClayEntity>`
 
@@ -158,7 +158,7 @@ Get single entity from resource
 | id | ClayId | Resource id |
 
 
-<a class='md-heading-link' name="clay-driver-sequelize-classes-sequelize-driver-list" ></a>
+<a class='md-heading-link' name="clay-driver-sequelize-class-sequelize-driver-list" ></a>
 
 ### driver.list(resourceName, condition) -> `Promise.<ClayCollection>`
 
@@ -170,7 +170,7 @@ List entities from resource
 | condition | ListCondition | List condition query |
 
 
-<a class='md-heading-link' name="clay-driver-sequelize-classes-sequelize-driver-create" ></a>
+<a class='md-heading-link' name="clay-driver-sequelize-class-sequelize-driver-create" ></a>
 
 ### driver.create(resourceName, attributes) -> `Promise.<ClayEntity>`
 
@@ -182,7 +182,7 @@ Create a new entity with resource
 | attributes | Object | Resource attributes to create |
 
 
-<a class='md-heading-link' name="clay-driver-sequelize-classes-sequelize-driver-update" ></a>
+<a class='md-heading-link' name="clay-driver-sequelize-class-sequelize-driver-update" ></a>
 
 ### driver.update(resourceName, id, attributes) -> `Promise.<ClayEntity>`
 
@@ -195,7 +195,7 @@ Update an existing entity in resource
 | attributes | Object | Resource attributes to update |
 
 
-<a class='md-heading-link' name="clay-driver-sequelize-classes-sequelize-driver-destroy" ></a>
+<a class='md-heading-link' name="clay-driver-sequelize-class-sequelize-driver-destroy" ></a>
 
 ### driver.destroy(resourceName, id) -> `Promise.<number>`
 
@@ -207,7 +207,7 @@ Delete a entity resource
 | id | ClayId | Resource id |
 
 
-<a class='md-heading-link' name="clay-driver-sequelize-classes-sequelize-driver-drop" ></a>
+<a class='md-heading-link' name="clay-driver-sequelize-class-sequelize-driver-drop" ></a>
 
 ### driver.drop(resourceName) -> `Promise.<boolean>`
 
@@ -218,7 +218,7 @@ Drop resource
 | resourceName | string | Name of resource |
 
 
-<a class='md-heading-link' name="clay-driver-sequelize-classes-sequelize-driver-resources" ></a>
+<a class='md-heading-link' name="clay-driver-sequelize-class-sequelize-driver-resources" ></a>
 
 ### driver.resources() -> `Promise.<Resource>`
 
