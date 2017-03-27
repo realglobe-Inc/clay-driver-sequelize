@@ -5,7 +5,7 @@
 'use strict'
 
 const defineModels = require('../lib/modeling/define_models.js')
-const assert = require('assert')
+const { equal } = require('assert')
 const path = require('path')
 const mkdirp = require('mkdirp')
 const Sequelize = require('sequelize')
@@ -35,10 +35,10 @@ describe('define-models', function () {
   it('Define models', () => co(function * () {
     const { Resource } = db.models
     let fooResource01 = yield Resource.ofName('foo')
-    assert.equal(fooResource01.name, 'foo')
+    equal(fooResource01.name, 'foo')
     let fooResource02 = yield Resource.ofName('foo')
-    assert.equal(fooResource02.name, 'foo')
-    assert.equal(fooResource01.id, fooResource02.id)
+    equal(fooResource02.name, 'foo')
+    equal(fooResource01.id, fooResource02.id)
   }))
 })
 

@@ -44,21 +44,22 @@ describe('sequelize-driver', function () {
       benchmark: true,
       logging: console.log
     })
-    let created = yield driver.create('users', {
+    let created = yield driver.create('User', {
       username: 'okunishinishi',
       birthday: new Date('1985/08/26')
     })
     ok(created)
     ok(created.id)
-    let one = yield driver.one('users', created.id)
+    let one = yield driver.one('User', created.id)
+    console.log(one, created)
     equal(String(one.id), String(created.id))
 
-    let created2 = yield driver.create('users', {
+    let created2 = yield driver.create('User', {
       username: 'hoge',
       birthday: new Date('1990/08/26')
     })
 
-    let created3 = yield driver.create('users', {
+    let created3 = yield driver.create('User', {
       username: 'foge',
       birthday: new Date('1983/08/26')
     })
@@ -66,36 +67,41 @@ describe('sequelize-driver', function () {
     equal(created.username, 'okunishinishi')
 
     {
-      let list01 = yield driver.list('users', {
+      let list01 = yield driver.list('User', {
         filter: {}
       })
       equal(String(list01.entities[ 0 ].id), String(created.id))
       ok(list01.meta)
       deepEqual(list01.meta, { offset: 0, limit: 100, total: 3, length: 3 })
 
-      let list02 = yield driver.list('users', {
+      let list02 = yield driver.list('User', {
         filter: { username: 'okunishinishi' }
       })
       ok(list02.meta)
       deepEqual(list02.meta, { offset: 0, limit: 100, total: 1, length: 1 })
 
-      let list03 = yield driver.list('users', {
+      let list03 = yield driver.list('User', {
         sort: [ 'birthday' ]
       })
       equal(list03.entities[ 0 ].username, 'foge')
 
-      let list04 = yield driver.list('users', {
+      let list04 = yield driver.list('User', {
         sort: [ '-birthday' ]
       })
       equal(list04.entities[ 0 ].username, 'hoge')
     }
 
-    yield driver.update('users', created2.id, { username: 'hogehoge' })
+    yield driver.update('User', created2.id, { username: 'hogehoge' })
 
-    yield driver.destroy('users', created3.id)
+    yield driver.destroy('User', created3.id)
 
-    deepEqual(yield driver.resources(), [ { name: 'users', version: 'latest' } ])
-    yield driver.drop('users')
+    {
+      let byId = yield driver.list('User', { filter: { id: created3.id } })
+      ok(byId)
+    }
+
+    deepEqual(yield driver.resources(), [ { name: 'User', version: 'latest' } ])
+    yield driver.drop('User')
     deepEqual(yield driver.resources(), [])
 
     yield driver.drop('__invalid_resource_name__')
