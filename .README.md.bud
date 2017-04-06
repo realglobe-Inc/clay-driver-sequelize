@@ -12,10 +12,7 @@ module.exports = readmeMdBud({
   repo: pkg.repository,
   sections: 'doc/guides/*.md.hbs',
   badges: {
-    // TODO OSS
-    // travis: true,
-    travisCom: true,
-    travisComToken: 'aeFzCpBZebyaRijpCFmm',
+    travis: true,
     npm: true,
     standard: true
   },
