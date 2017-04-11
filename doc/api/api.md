@@ -5,7 +5,7 @@ Clay driver for Sequelize
 + Functions
   + [create(args)](#clay-driver-sequelize-function-create)
 + [`SequelizeDriver`](#clay-driver-sequelize-class) Class
-  + [new SequelizeDriver()](#clay-driver-sequelize-class-sequelize-driver-constructor)
+  + [new SequelizeDriver(database, username, password, options)](#clay-driver-sequelize-class-sequelize-driver-constructor)
   + [driver.one(resourceName, id)](#clay-driver-sequelize-class-sequelize-driver-one)
   + [driver.list(resourceName, condition)](#clay-driver-sequelize-class-sequelize-driver-list)
   + [driver.create(resourceName, attributes)](#clay-driver-sequelize-class-sequelize-driver-create)
@@ -42,10 +42,16 @@ Abstract driver
 
 <a class='md-heading-link' name="clay-driver-sequelize-class-sequelize-driver-constructor" ></a>
 
-### new SequelizeDriver()
+### new SequelizeDriver(database, username, password, options)
 
 Constructor of SequelizeDriver class
 
+| Param | Type | Description |
+| ----- | --- | -------- |
+| database | string | Name of database |
+| username | string | Database username |
+| password | string | Database password |
+| options | Object | Optional settings |
 
 
 <a class='md-heading-link' name="clay-driver-sequelize-class-sequelize-driver-one" ></a>

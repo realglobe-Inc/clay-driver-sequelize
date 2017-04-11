@@ -35,7 +35,40 @@
       "constructor": {
         "name": "SequelizeDriver",
         "description": "Abstract driver",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "database",
+            "type": "string",
+            "description": "Name of database",
+            "default": "",
+            "optional": "",
+            "nullable": ""
+          },
+          {
+            "name": "username",
+            "type": "string",
+            "description": "Database username",
+            "default": "",
+            "optional": "",
+            "nullable": ""
+          },
+          {
+            "name": "password",
+            "type": "string",
+            "description": "Database password",
+            "default": "",
+            "optional": "",
+            "nullable": ""
+          },
+          {
+            "name": "options",
+            "type": "Object",
+            "description": "Optional settings",
+            "default": "{}",
+            "optional": true,
+            "nullable": ""
+          }
+        ],
         "examples": []
       },
       "functions": [
