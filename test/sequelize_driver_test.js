@@ -16,21 +16,23 @@ const co = require('co')
 
 describe('sequelize-driver', function () {
   this.timeout(3000)
-  let db
   let storage01 = `${__dirname}/../tmp/testing-driver.db`
   let storage02 = `${__dirname}/../tmp/testing-driver-2.db`
   let storage03 = `${__dirname}/../tmp/testing-driver-3.db`
   let storage04 = `${__dirname}/../tmp/testing-driver-4.db`
+  let storage05 = `${__dirname}/../tmp/testing-driver-5.db`
 
   before(() => co(function * () {
     rimraf.sync(storage01)
     rimraf.sync(storage02)
     rimraf.sync(storage03)
     rimraf.sync(storage04)
+    rimraf.sync(storage05)
     mkdirp.sync(path.dirname(storage01))
     mkdirp.sync(path.dirname(storage02))
     mkdirp.sync(path.dirname(storage03))
     mkdirp.sync(path.dirname(storage04))
+    mkdirp.sync(path.dirname(storage05))
   }))
 
   after(() => co(function * () {
@@ -166,6 +168,38 @@ describe('sequelize-driver', function () {
       let ages = people.entities.map(p => p.age)
       deepEqual(ages, [ 3, 2, 1 ])
     }
+  }))
+
+  it('Nested attribute and refs', () => co(function * () {
+    let driver = new SequelizeDriver('hoge', '', '', {
+      storage: storage05,
+      dialect: 'sqlite',
+      benchmark: true,
+      logging: false
+    })
+    let created = yield driver.create('Foo', {
+      bar: {
+        b: false,
+        n: 1,
+        s: 'hoge',
+        d: new Date()
+      }
+    })
+    equal(typeof created.bar.b, 'boolean')
+    equal(typeof created.bar.n, 'number')
+    equal(typeof created.bar.s, 'string')
+    ok(created.bar.d instanceof Date)
+
+    yield driver.drop('Foo')
+    yield driver.create('User', {
+      name: 'user01',
+      org: { $ref: 'Org#1' }
+    })
+    yield driver.create('User', {
+      name: 'user02',
+      org: { $ref: 'Org#2' }
+    })
+    yield driver.drop('User')
   }))
 })
 
