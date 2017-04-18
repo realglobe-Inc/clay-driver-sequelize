@@ -29,6 +29,7 @@
     "clay-entity": "^2.0.1",
     "clay-id": "^3.0.1",
     "clay-list-pager": "^2.0.1",
+    "clay-resource-name": "^4.0.1",
     "clay-serial": "^2.0.2",
     "co": "^4.6.0",
     "continuation-local-storage": "^3.2.0",
