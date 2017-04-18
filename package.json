@@ -32,6 +32,7 @@
     "clay-serial": "^2.0.2",
     "co": "^4.6.0",
     "continuation-local-storage": "^3.2.0",
+    "objnest": "^3.0.9",
     "sequelize": "^3.30.4"
   },
   "devDependencies": {
@@ -44,7 +45,7 @@
     "ape-tmpl": "^5.0.20",
     "ape-updating": "^4.1.0",
     "clay-driver-tests": "^2.0.1",
-    "clay-lump": "^4.0.1",
+    "clay-lump": "^4.1.1",
     "coz": "^6.0.20",
     "injectmock": "^2.0.0",
     "mkdirp": "^0.5.1",
