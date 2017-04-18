@@ -200,6 +200,13 @@ describe('sequelize-driver', function () {
       org: { $ref: 'Org#2' }
     })
     yield driver.drop('User')
+
+    let list = yield driver.list('User', {
+      filter: {
+        org: { $ref: 'Org#2' }
+      }
+    })
+    console.log(list)
   }))
 })
 
