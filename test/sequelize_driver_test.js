@@ -102,7 +102,7 @@ describe('sequelize-driver', function () {
       ok(byId)
     }
 
-    deepEqual(yield driver.resources(), [ { name: 'User', version: 'latest' } ])
+    deepEqual(yield driver.resources(), [ { name: 'User', domain: null } ])
     yield driver.drop('User')
     deepEqual(yield driver.resources(), [])
 
@@ -199,6 +199,15 @@ describe('sequelize-driver', function () {
       name: 'user02',
       org: { $ref: 'Org#2' }
     })
+
+    let list = yield driver.list('User', {
+      filter: {
+        org: { $ref: 'Org#2' }
+      }
+    })
+    equal(list.meta.length, 1)
+    equal(list.entities[ 0 ].name, 'user02')
+
     yield driver.drop('User')
   }))
 })
