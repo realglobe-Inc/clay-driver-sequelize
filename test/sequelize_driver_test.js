@@ -177,18 +177,25 @@ describe('sequelize-driver', function () {
       benchmark: true,
       logging: false
     })
+    let d = new Date()
     let created = yield driver.create('Foo', {
       bar: {
         b: false,
         n: 1,
         s: 'hoge',
-        d: new Date()
+        d
       }
     })
     equal(typeof created.bar.b, 'boolean')
     equal(typeof created.bar.n, 'number')
     equal(typeof created.bar.s, 'string')
     ok(created.bar.d instanceof Date)
+
+    equal((yield driver.list('Foo', { filter: { bar: { b: false } } })).meta.length, 1)
+    equal((yield driver.list('Foo', { filter: { bar: { n: 1 } } })).meta.length, 1)
+    equal((yield driver.list('Foo', { filter: { bar: { s: 'hoge' } } })).meta.length, 1)
+    equal((yield driver.list('Foo', { filter: { bar: { s: 'fuge' } } })).meta.length, 0)
+    equal((yield driver.list('Foo', { filter: { bar: { d } } })).meta.length, 1)
 
     yield driver.drop('Foo')
     yield driver.create('User', {
