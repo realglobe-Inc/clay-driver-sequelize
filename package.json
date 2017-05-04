@@ -23,8 +23,8 @@
   },
   "homepage": "https://github.com/realglobe-Inc/clay-driver-sequelize#readme",
   "dependencies": {
-    "clay-collection": "^2.0.1",
-    "clay-constants": "^3.0.1",
+    "clay-collection": "^3.0.1",
+    "clay-constants": "^3.0.2",
     "clay-driver-base": "^3.0.1",
     "clay-entity": "^2.0.1",
     "clay-id": "^3.0.1",
@@ -44,7 +44,7 @@
     "ape-releasing": "^4.0.4",
     "ape-tasking": "^4.0.9",
     "ape-tmpl": "^5.0.20",
-    "ape-updating": "^4.1.0",
+    "ape-updating": "^4.1.1",
     "clay-driver-tests": "^2.0.1",
     "clay-lump": "^4.1.1",
     "coz": "^6.0.20",
@@ -55,7 +55,7 @@
     "sg-templates": "^1.4.4",
     "sqlite3": "^3.1.8",
     "sugos-travis": "^2.0.7",
-    "writeout": "^2.1.0"
+    "writeout": "^2.2.0"
   },
   "engines": {
     "node": ">=6",
