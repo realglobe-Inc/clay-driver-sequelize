@@ -216,6 +216,8 @@ describe('sequelize-driver', function () {
     equal(list.entities[ 0 ].name, 'user02')
 
     yield driver.drop('User')
+
+    yield driver.close()
   }))
 })
 
