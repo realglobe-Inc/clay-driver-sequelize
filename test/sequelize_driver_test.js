@@ -111,6 +111,8 @@ describe('sequelize-driver', function () {
     {
       let hoge = yield driver.create('Hoge', { id: 1 })
       equal(hoge.id, '1')
+      let one = yield driver.one('Hoge', hoge.id)
+      equal(String(hoge.id), String(one.id))
     }
   }))
 
