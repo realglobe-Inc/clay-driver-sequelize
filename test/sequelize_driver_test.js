@@ -145,7 +145,8 @@ describe('sequelize-driver', function () {
         storage: storage04,
         dialect: 'sqlite',
         benchmark: true,
-        logging: console.log
+        // logging: console.log,
+        logging:false
       })
     })
     let Person = lump.resource('Person')
