@@ -235,9 +235,10 @@ describe('sequelize-driver', function () {
       storage: storage05,
       dialect: 'sqlite',
       benchmark: true,
-      logging: false
+      logging: false,
+      // logging: console.log
     })
-    yield driver.create('Box', { size: 100 })
+    yield driver.create('Box', { size: 40 })
     yield driver.create('Box', { size: 200 })
     yield driver.create('Box', { size: 300 })
 
