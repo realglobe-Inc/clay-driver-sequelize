@@ -241,8 +241,13 @@ describe('sequelize-driver', function () {
     yield driver.create('Box', { size: 200 })
     yield driver.create('Box', { size: 300 })
 
-    console.log(
-      (yield driver.list('Box', { filter: { size: { $gt: 200 } } })).meta.total
+    equal(
+      (yield driver.list('Box', { filter: { size: { $gt: 200 } } })).meta.total,
+      1
+    )
+    equal(
+      (yield driver.list('Box', { filter: { size: { $gte: 200 } } })).meta.total,
+      2
     )
   }))
 })
