@@ -21,6 +21,7 @@ describe('sequelize-driver', function () {
   let storage03 = `${__dirname}/../tmp/testing-driver-3.db`
   let storage04 = `${__dirname}/../tmp/testing-driver-4.db`
   let storage05 = `${__dirname}/../tmp/testing-driver-5.db`
+  let storage06 = `${__dirname}/../tmp/testing-driver-6.db`
 
   before(() => co(function * () {
     rimraf.sync(storage01)
@@ -28,11 +29,13 @@ describe('sequelize-driver', function () {
     rimraf.sync(storage03)
     rimraf.sync(storage04)
     rimraf.sync(storage05)
+    rimraf.sync(storage06)
     mkdirp.sync(path.dirname(storage01))
     mkdirp.sync(path.dirname(storage02))
     mkdirp.sync(path.dirname(storage03))
     mkdirp.sync(path.dirname(storage04))
     mkdirp.sync(path.dirname(storage05))
+    mkdirp.sync(path.dirname(storage06))
   }))
 
   after(() => co(function * () {
@@ -142,7 +145,8 @@ describe('sequelize-driver', function () {
         storage: storage04,
         dialect: 'sqlite',
         benchmark: true,
-        logging: console.log
+        // logging: console.log,
+        logging:false
       })
     })
     let Person = lump.resource('Person')
@@ -225,6 +229,28 @@ describe('sequelize-driver', function () {
     yield driver.drop('User')
 
     yield driver.close()
+  }))
+
+  it('Using operator', () => co(function * () {
+    let driver = new SequelizeDriver('hoge', '', '', {
+      storage: storage05,
+      dialect: 'sqlite',
+      benchmark: true,
+      logging: false,
+      // logging: console.log
+    })
+    yield driver.create('Box', { size: 40 })
+    yield driver.create('Box', { size: 200 })
+    yield driver.create('Box', { size: 300 })
+
+    equal(
+      (yield driver.list('Box', { filter: { size: { $gt: 200 } } })).meta.total,
+      1
+    )
+    equal(
+      (yield driver.list('Box', { filter: { size: { $gte: 200 } } })).meta.total,
+      2
+    )
   }))
 })
 
