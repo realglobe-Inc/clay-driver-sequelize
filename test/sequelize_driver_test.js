@@ -24,18 +24,18 @@ describe('sequelize-driver', function () {
   let storage06 = `${__dirname}/../tmp/testing-driver-6.db`
 
   before(() => co(function * () {
-    rimraf.sync(storage01)
-    rimraf.sync(storage02)
-    rimraf.sync(storage03)
-    rimraf.sync(storage04)
-    rimraf.sync(storage05)
-    rimraf.sync(storage06)
-    mkdirp.sync(path.dirname(storage01))
-    mkdirp.sync(path.dirname(storage02))
-    mkdirp.sync(path.dirname(storage03))
-    mkdirp.sync(path.dirname(storage04))
-    mkdirp.sync(path.dirname(storage05))
-    mkdirp.sync(path.dirname(storage06))
+    let storages = [
+      storage01,
+      storage02,
+      storage03,
+      storage04,
+      storage05,
+      storage06
+    ]
+    for (let storage of storages) {
+      rimraf.sync(storage)
+      mkdirp.sync(path.dirname(storage))
+    }
   }))
 
   after(() => co(function * () {
@@ -146,7 +146,7 @@ describe('sequelize-driver', function () {
         dialect: 'sqlite',
         benchmark: true,
         // logging: console.log,
-        logging:false
+        logging: false
       })
     })
     let Person = lump.resource('Person')
@@ -249,6 +249,15 @@ describe('sequelize-driver', function () {
     )
     equal(
       (yield driver.list('Box', { filter: { size: { $gte: 200 } } })).meta.total,
+      2
+    )
+
+    equal(
+      (yield driver.list('Box', { filter: { size: { $in: [ 200 ] } } })).meta.total,
+      1
+    )
+    equal(
+      (yield driver.list('Box', { filter: { size: { $between: [ 30, 210 ] } } })).meta.total,
       2
     )
   }))
