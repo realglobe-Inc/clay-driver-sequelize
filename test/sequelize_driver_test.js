@@ -22,6 +22,7 @@ describe('sequelize-driver', function () {
   let storage04 = `${__dirname}/../tmp/testing-driver-4.db`
   let storage05 = `${__dirname}/../tmp/testing-driver-5.db`
   let storage06 = `${__dirname}/../tmp/testing-driver-6.db`
+  let storage07 = `${__dirname}/../tmp/testing-driver-7.db`
 
   before(() => co(function * () {
     let storages = [
@@ -30,7 +31,8 @@ describe('sequelize-driver', function () {
       storage03,
       storage04,
       storage05,
-      storage06
+      storage06,
+      storage07
     ]
     for (let storage of storages) {
       rimraf.sync(storage)
@@ -260,6 +262,21 @@ describe('sequelize-driver', function () {
       (yield driver.list('Box', { filter: { size: { $between: [ 30, 210 ] } } })).meta.total,
       2
     )
+  }))
+
+  it('claydb/issues/9', () => co(function * () {
+    let driver = new SequelizeDriver('hoge', '', '', {
+      storage: storage07,
+      dialect: 'sqlite',
+      benchmark: true,
+      logging: false
+    })
+
+    let user = yield driver.create('User', {
+      names: [ 'hoge', 'fuga' ]
+    })
+    ok(Array.isArray(user.names))
+    deepEqual(user.names, [ 'hoge', 'fuga' ])
   }))
 })
 
