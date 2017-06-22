@@ -264,6 +264,7 @@ describe('sequelize-driver', function () {
     )
   }))
 
+  // https://github.com/realglobe-Inc/claydb/issues/9
   it('claydb/issues/9', () => co(function * () {
     let driver = new SequelizeDriver('hoge', '', '', {
       storage: storage07,
