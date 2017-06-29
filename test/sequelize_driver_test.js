@@ -276,10 +276,19 @@ describe('sequelize-driver', function () {
     })
 
     let user = yield driver.create('User', {
-      names: [ 'hoge', 'fuga' ]
+      names: [ 'hoge', 'fuga' ],
+      nested: [
+        [ 'n-0-0', 'n-0-1' ],
+        [ 'n-0-1', [ 'n-1-1-0', 'n-1-1-1' ] ]
+      ]
     })
     ok(Array.isArray(user.names))
     deepEqual(user.names, [ 'hoge', 'fuga' ])
+
+    deepEqual(user.nested, [
+      [ 'n-0-0', 'n-0-1' ],
+      [ 'n-0-1', [ 'n-1-1-0', 'n-1-1-1' ] ]
+    ])
   }))
 
   // https://github.com/realglobe-Inc/clay-driver-sequelize/issues/18#issuecomment-310563957
