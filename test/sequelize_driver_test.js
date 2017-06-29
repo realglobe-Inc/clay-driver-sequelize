@@ -22,6 +22,8 @@ describe('sequelize-driver', function () {
   let storage04 = `${__dirname}/../tmp/testing-driver-4.db`
   let storage05 = `${__dirname}/../tmp/testing-driver-5.db`
   let storage06 = `${__dirname}/../tmp/testing-driver-6.db`
+  let storage07 = `${__dirname}/../tmp/testing-driver-7.db`
+  let storage08 = `${__dirname}/../tmp/testing-driver-7.db`
 
   before(() => co(function * () {
     let storages = [
@@ -30,7 +32,9 @@ describe('sequelize-driver', function () {
       storage03,
       storage04,
       storage05,
-      storage06
+      storage06,
+      storage07,
+      storage08
     ]
     for (let storage of storages) {
       rimraf.sync(storage)
@@ -259,6 +263,50 @@ describe('sequelize-driver', function () {
     equal(
       (yield driver.list('Box', { filter: { size: { $between: [ 30, 210 ] } } })).meta.total,
       2
+    )
+  }))
+
+  // https://github.com/realglobe-Inc/claydb/issues/9
+  it('claydb/issues/9', () => co(function * () {
+    let driver = new SequelizeDriver('hoge', '', '', {
+      storage: storage07,
+      dialect: 'sqlite',
+      benchmark: true,
+      logging: false
+    })
+
+    let user = yield driver.create('User', {
+      names: [ 'hoge', 'fuga' ]
+    })
+    ok(Array.isArray(user.names))
+    deepEqual(user.names, [ 'hoge', 'fuga' ])
+  }))
+
+  // https://github.com/realglobe-Inc/clay-driver-sequelize/issues/18#issuecomment-310563957
+  it('issues/18', () => co(function * () {
+    let driver = new SequelizeDriver('hoge', '', '', {
+      storage: storage08,
+      dialect: 'sqlite',
+      benchmark: true,
+      logging: false
+    })
+
+    yield driver.drop('User')
+    yield driver.create('User', { d: new Date('2017/06/22') })
+    yield driver.create('User', { d: new Date('2017/07/22') })
+    yield driver.create('User', { d: new Date('2017/08/22') })
+
+    equal(
+      (yield driver.list('User', { filter: { d: { $gt: new Date('2017/07/23') } } })).meta.length,
+      1
+    )
+    equal(
+      (yield driver.list('User', { filter: { d: { $gt: new Date('2017/06/23') } } })).meta.length,
+      2
+    )
+    equal(
+      (yield driver.list('User', { filter: { d: { $between: [ new Date('2017/07/21'), new Date('2017/07/23') ] } } })).meta.length,
+      1
     )
   }))
 })
