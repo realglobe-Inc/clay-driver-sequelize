@@ -31,7 +31,7 @@
     "clay-id": "^3.0.1",
     "clay-list-pager": "^2.0.1",
     "clay-resource-name": "^4.0.1",
-    "clay-serial": "^2.0.2",
+    "clay-serial": "^2.0.3",
     "co": "^4.6.0",
     "continuation-local-storage": "^3.2.0",
     "objnest": "^3.0.9",
