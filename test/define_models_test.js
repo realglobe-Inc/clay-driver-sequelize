@@ -43,7 +43,15 @@ describe('define-models', function () {
   it('Entity', () => co(function * () {
     const { Resource, Entity } = db.models
     let resource = yield Resource.ofName('User')
-    yield Entity.forList(resource)
+    yield Entity.forList(resource, {
+      filter: {
+        name: { $gt: 1 },
+        active: true
+      },
+      sort: [
+        '-name'
+      ]
+    })
   }))
 })
 
