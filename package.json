@@ -1,6 +1,6 @@
 {
   "name": "clay-driver-sequelize",
-  "version": "3.0.14",
+  "version": "4.0.0",
   "description": "Clay driver for Sequelize",
   "main": "lib",
   "browser": "ci/browser",
@@ -35,7 +35,7 @@
     "co": "^4.6.0",
     "continuation-local-storage": "^3.2.0",
     "objnest": "^3.0.9",
-    "sequelize": "^3.30.4"
+    "sequelize": "^4.2.1"
   },
   "devDependencies": {
     "ababel": "^2.0.1",
@@ -46,7 +46,7 @@
     "ape-tasking": "^4.0.9",
     "ape-tmpl": "^5.0.20",
     "ape-updating": "^4.1.1",
-    "clay-driver-tests": "^2.0.1",
+    "clay-driver-tests": "^2.0.2",
     "clay-lump": "^4.2.3",
     "coz": "^6.0.20",
     "injectmock": "^2.0.0",

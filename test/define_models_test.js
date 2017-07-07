@@ -18,7 +18,7 @@ describe('define-models', function () {
 
   before(() => co(function * () {
     mkdirp.sync(path.dirname(storage))
-    db = new Sequelize('models', '', '', {
+    db = new Sequelize('models', null, null, {
       storage,
       dialect: 'sqlite'
     })
@@ -32,13 +32,18 @@ describe('define-models', function () {
   after(() => co(function * () {
   }))
 
-  it('Define models', () => co(function * () {
+  it('Resource', () => co(function * () {
     const { Resource } = db.models
     let fooResource01 = yield Resource.ofName('foo')
     equal(fooResource01.name, 'foo')
     let fooResource02 = yield Resource.ofName('foo')
     equal(fooResource02.name, 'foo')
     equal(fooResource01.id, fooResource02.id)
+  }))
+  it('Entity', () => co(function * () {
+    const { Resource, Entity } = db.models
+    let resource = yield Resource.ofName('User')
+    yield Entity.forList(resource)
   }))
 })
 
