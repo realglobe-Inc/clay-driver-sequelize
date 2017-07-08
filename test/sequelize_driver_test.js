@@ -94,9 +94,11 @@ describe('sequelize-driver', function () {
       equal(list03.entities[ 0 ].username, 'foge')
 
       let list04 = yield driver.list('User', {
-        sort: [ '-birthday' ]
+        sort: [ '-birthday' ],
+        page: { size: 2, number: 1 }
       })
       equal(list04.entities[ 0 ].username, 'hoge')
+      deepEqual(list04.meta, { offset: 0, limit: 2, total: 3, length: 2 })
     }
 
     yield driver.update('User', created2.id, { username: 'hogehoge' })
