@@ -60,7 +60,6 @@ describe('sequelize-driver', function () {
     ok(created)
     ok(created.id)
     let one = yield driver.one('User', created.id)
-    console.log(one, created)
     equal(String(one.id), String(created.id))
 
     let created2 = yield driver.create('User', {
@@ -79,48 +78,48 @@ describe('sequelize-driver', function () {
       let list01 = yield driver.list('User', {
         filter: {}
       })
-      // equal(String(list01.entities[ 0 ].id), String(created.id))
-      // ok(list01.meta)
-      // deepEqual(list01.meta, { offset: 0, limit: 100, total: 3, length: 3 })
-      //
-      // let list02 = yield driver.list('User', {
-      //   filter: { username: 'okunishinishi' }
-      // })
-      // ok(list02.meta)
-      // deepEqual(list02.meta, { offset: 0, limit: 100, total: 1, length: 1 })
-      //
-      // let list03 = yield driver.list('User', {
-      //   sort: [ 'birthday' ]
-      // })
-      // equal(list03.entities[ 0 ].username, 'foge')
-      //
-      // let list04 = yield driver.list('User', {
-      //   sort: [ '-birthday' ]
-      // })
-      // equal(list04.entities[ 0 ].username, 'hoge')
+      equal(String(list01.entities[ 0 ].id), String(created.id))
+      ok(list01.meta)
+      deepEqual(list01.meta, { offset: 0, limit: 100, total: 3, length: 3 })
+
+      let list02 = yield driver.list('User', {
+        filter: { username: 'okunishinishi' }
+      })
+      ok(list02.meta)
+      deepEqual(list02.meta, { offset: 0, limit: 100, total: 1, length: 1 })
+
+      let list03 = yield driver.list('User', {
+        sort: [ 'birthday' ]
+      })
+      equal(list03.entities[ 0 ].username, 'foge')
+
+      let list04 = yield driver.list('User', {
+        sort: [ '-birthday' ]
+      })
+      equal(list04.entities[ 0 ].username, 'hoge')
     }
-    //
-    // yield driver.update('User', created2.id, { username: 'hogehoge' })
-    //
-    // yield driver.destroy('User', created3.id)
-    //
-    // {
-    //   let byId = yield driver.list('User', { filter: { id: created3.id } })
-    //   ok(byId)
-    // }
-    //
-    // deepEqual(yield driver.resources(), [ { name: 'User', domain: null } ])
-    // yield driver.drop('User')
-    // deepEqual(yield driver.resources(), [])
-    //
-    // yield driver.drop('__invalid_resource_name__')
-    //
-    // {
-    //   let hoge = yield driver.create('Hoge', { id: 1 })
-    //   equal(hoge.id, '1')
-    //   let one = yield driver.one('Hoge', hoge.id)
-    //   equal(String(hoge.id), String(one.id))
-    // }
+
+    yield driver.update('User', created2.id, { username: 'hogehoge' })
+
+    yield driver.destroy('User', created3.id)
+
+    {
+      let byId = yield driver.list('User', { filter: { id: created3.id } })
+      ok(byId)
+    }
+
+    deepEqual(yield driver.resources(), [ { name: 'User', domain: null } ])
+    yield driver.drop('User')
+    deepEqual(yield driver.resources(), [])
+
+    yield driver.drop('__invalid_resource_name__')
+
+    {
+      let hoge = yield driver.create('Hoge', { id: 1 })
+      equal(hoge.id, '1')
+      let one = yield driver.one('Hoge', hoge.id)
+      equal(String(hoge.id), String(one.id))
+    }
   }))
 
 // https://github.com/realglobe-Inc/clay-driver-sqlite/issues/5
