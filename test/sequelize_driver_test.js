@@ -60,7 +60,6 @@ describe('sequelize-driver', function () {
     ok(created)
     ok(created.id)
     let one = yield driver.one('User', created.id)
-    console.log(one, created)
     equal(String(one.id), String(created.id))
 
     let created2 = yield driver.create('User', {
