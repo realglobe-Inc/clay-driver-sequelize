@@ -15,7 +15,7 @@ const rimraf = require('rimraf')
 const co = require('co')
 
 describe('sequelize-driver', function () {
-  this.timeout(3000)
+  this.timeout(30000)
   let storage01 = `${__dirname}/../tmp/testing-driver.db`
   let storage02 = `${__dirname}/../tmp/testing-driver-2.db`
   let storage03 = `${__dirname}/../tmp/testing-driver-3.db`
@@ -23,7 +23,8 @@ describe('sequelize-driver', function () {
   let storage05 = `${__dirname}/../tmp/testing-driver-5.db`
   let storage06 = `${__dirname}/../tmp/testing-driver-6.db`
   let storage07 = `${__dirname}/../tmp/testing-driver-7.db`
-  let storage08 = `${__dirname}/../tmp/testing-driver-7.db`
+  let storage08 = `${__dirname}/../tmp/testing-driver-8.db`
+  let storage09 = `${__dirname}/../tmp/testing-driver-9.db`
 
   before(() => co(function * () {
     let storages = [
@@ -34,7 +35,8 @@ describe('sequelize-driver', function () {
       storage05,
       storage06,
       storage07,
-      storage08
+      storage08,
+      storage09
     ]
     for (let storage of storages) {
       rimraf.sync(storage)
@@ -318,6 +320,48 @@ describe('sequelize-driver', function () {
       (yield driver.list('User', { filter: { d: { $between: [ new Date('2017/07/21'), new Date('2017/07/23') ] } } })).meta.length,
       1
     )
+  }))
+
+  it('A lot of CRUD', () => co(function * () {
+    let driver = new SequelizeDriver('hoge', '', '', {
+      storage: storage09,
+      dialect: 'sqlite',
+      benchmark: true,
+      logging: false
+    })
+    yield driver.drop('Box')
+
+    const NUMBER_OF_ENTITY = 100
+    const NUMBER_OF_ATTRIBUTE = 20
+    let ids = []
+
+    // Create
+    {
+      let startAt = new Date()
+      for (let i = 0; i < NUMBER_OF_ENTITY; i++) {
+        let attributes = new Array(NUMBER_OF_ATTRIBUTE - 1)
+          .fill(null)
+          .reduce((attr, _, j) => Object.assign(attr, {
+            [`attr-${j}`]: j
+          }), { index: i })
+        let { id } = yield driver.create('Box', attributes)
+        ids.push(id)
+      }
+      console.log(`Took ${new Date() - startAt}ms for ${NUMBER_OF_ENTITY} entities, ${NUMBER_OF_ATTRIBUTE} attributes to create`)
+    }
+    // Update
+    {
+      let startAt = new Date()
+      for (let id of ids) {
+        let attributes = new Array(NUMBER_OF_ATTRIBUTE - 1)
+          .fill(null)
+          .reduce((attr, _, j) => Object.assign(attr, {
+            [`attr-${j}`]: `${j}-updated`
+          }), {})
+        yield driver.update('Box', id, attributes)
+      }
+      console.log(`Took ${new Date() - startAt}ms for ${NUMBER_OF_ENTITY} entities, ${NUMBER_OF_ATTRIBUTE} attributes to update`)
+    }
   }))
 })
 
