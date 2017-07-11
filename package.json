@@ -35,7 +35,8 @@
     "co": "^4.6.0",
     "continuation-local-storage": "^3.2.0",
     "objnest": "^3.0.9",
-    "sequelize": "^4.2.1"
+    "sequelize": "^4.2.1",
+    "sg-queue": "^1.1.4"
   },
   "devDependencies": {
     "ababel": "^2.0.1",

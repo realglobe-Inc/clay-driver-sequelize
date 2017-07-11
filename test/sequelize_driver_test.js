@@ -338,15 +338,18 @@ describe('sequelize-driver', function () {
     // Create
     {
       let startAt = new Date()
+      let creatingQueue = []
       for (let i = 0; i < NUMBER_OF_ENTITY; i++) {
         let attributes = new Array(NUMBER_OF_ATTRIBUTE - 1)
           .fill(null)
           .reduce((attr, _, j) => Object.assign(attr, {
             [`attr-${j}`]: j
           }), { index: i })
-        let { id } = yield driver.create('Box', attributes)
-        ids.push(id)
+        creatingQueue.push(driver.create('Box', attributes))
       }
+      ids.push(
+        ...(yield Promise.all(creatingQueue)).map(({ id }) => id)
+      )
       console.log(`Took ${new Date() - startAt}ms for ${NUMBER_OF_ENTITY} entities, ${NUMBER_OF_ATTRIBUTE} attributes to create`)
     }
     // Update
