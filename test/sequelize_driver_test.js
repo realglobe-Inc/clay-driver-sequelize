@@ -108,7 +108,17 @@ describe('sequelize-driver', function () {
 
     yield driver.update('User', created2.id, { username: 'hogehoge' })
 
+    {
+      let beforeDestroy = yield driver.one('User', created3.id)
+      ok(beforeDestroy)
+    }
+
     yield driver.destroy('User', created3.id)
+
+    {
+      let afterDestroy = yield driver.one('User', created3.id)
+      ok(!afterDestroy)
+    }
 
     {
       let byId = yield driver.list('User', { filter: { id: created3.id } })
@@ -444,22 +454,23 @@ describe('sequelize-driver', function () {
     }
     // Update
     {
-      let startAt = new Date()
-      let updateQueue = []
-      for (let id of ids) {
-        let attributes = new Array(NUMBER_OF_ATTRIBUTE - 1)
-          .fill(null)
-          .reduce((attr, _, j) => Object.assign(attr, {
-            [`attr-${j}`]: `${j}-updated`
-          }), {})
-        updateQueue.push(
-          driver.update('Box', id, attributes)
-        )
+      for (let i = 0; i < 2; i++) {
+        let startAt = new Date()
+        let updateQueue = []
+        for (let id of ids) {
+          let attributes = new Array(NUMBER_OF_ATTRIBUTE - 1)
+            .fill(null)
+            .reduce((attr, _, j) => Object.assign(attr, {
+              [`attr-${j}`]: `${j}-updated-${i}`
+            }), {})
+          updateQueue.push(
+            driver.update('Box', id, attributes)
+          )
+        }
+        yield Promise.all(updateQueue)
+        console.log(`Took ${new Date() - startAt}ms for ${NUMBER_OF_ENTITY} entities, ${NUMBER_OF_ATTRIBUTE} attributes to update`)
       }
-      yield Promise.all(updateQueue)
-      console.log(`Took ${new Date() - startAt}ms for ${NUMBER_OF_ENTITY} entities, ${NUMBER_OF_ATTRIBUTE} attributes to update`)
     }
-
 
     yield driver.close()
   }))
