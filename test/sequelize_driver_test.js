@@ -334,8 +334,8 @@ describe('sequelize-driver', function () {
     })
     yield driver.drop('Box')
 
-    const NUMBER_OF_ENTITY = 100
-    const NUMBER_OF_ATTRIBUTE = 10
+    const NUMBER_OF_ENTITY = 200
+    const NUMBER_OF_ATTRIBUTE = 20
     let ids = []
 
     // Create
@@ -358,14 +358,18 @@ describe('sequelize-driver', function () {
     // Update
     {
       let startAt = new Date()
+      let updateQueue = []
       for (let id of ids) {
         let attributes = new Array(NUMBER_OF_ATTRIBUTE - 1)
           .fill(null)
           .reduce((attr, _, j) => Object.assign(attr, {
             [`attr-${j}`]: `${j}-updated`
           }), {})
-        yield driver.update('Box', id, attributes)
+        updateQueue.push(
+          driver.update('Box', id, attributes)
+        )
       }
+      yield Promise.all(updateQueue)
       console.log(`Took ${new Date() - startAt}ms for ${NUMBER_OF_ENTITY} entities, ${NUMBER_OF_ATTRIBUTE} attributes to update`)
     }
 
@@ -417,8 +421,8 @@ describe('sequelize-driver', function () {
     })
     yield driver.drop('Box')
 
-    const NUMBER_OF_ENTITY = 1000
-    const NUMBER_OF_ATTRIBUTE = 10
+    const NUMBER_OF_ENTITY = 100
+    const NUMBER_OF_ATTRIBUTE = 30
     let ids = []
 
     // Create
@@ -438,6 +442,24 @@ describe('sequelize-driver', function () {
       )
       console.log(`Took ${new Date() - startAt}ms for ${NUMBER_OF_ENTITY} entities, ${NUMBER_OF_ATTRIBUTE} attributes to create`)
     }
+    // Update
+    {
+      let startAt = new Date()
+      let updateQueue = []
+      for (let id of ids) {
+        let attributes = new Array(NUMBER_OF_ATTRIBUTE - 1)
+          .fill(null)
+          .reduce((attr, _, j) => Object.assign(attr, {
+            [`attr-${j}`]: `${j}-updated`
+          }), {})
+        updateQueue.push(
+          driver.update('Box', id, attributes)
+        )
+      }
+      yield Promise.all(updateQueue)
+      console.log(`Took ${new Date() - startAt}ms for ${NUMBER_OF_ENTITY} entities, ${NUMBER_OF_ATTRIBUTE} attributes to update`)
+    }
+
 
     yield driver.close()
   }))
