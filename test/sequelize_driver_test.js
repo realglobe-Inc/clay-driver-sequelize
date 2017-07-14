@@ -9,6 +9,7 @@ const clayDriverTests = require('clay-driver-tests')
 const clayLump = require('clay-lump')
 const { ok, equal, deepEqual, strictEqual } = require('assert')
 const path = require('path')
+const { exec } = require('child_process')
 const mkdirp = require('mkdirp')
 const rimraf = require('rimraf')
 
@@ -331,7 +332,7 @@ describe('sequelize-driver', function () {
     })
     yield driver.drop('Box')
 
-    const NUMBER_OF_ENTITY = 100
+    const NUMBER_OF_ENTITY = 10
     const NUMBER_OF_ATTRIBUTE = 20
     let ids = []
 
@@ -365,6 +366,78 @@ describe('sequelize-driver', function () {
       }
       console.log(`Took ${new Date() - startAt}ms for ${NUMBER_OF_ENTITY} entities, ${NUMBER_OF_ATTRIBUTE} attributes to update`)
     }
+
+    yield driver.close()
+  }))
+
+  it('A lot of CRUD on mysql', () => co(function * () {
+    function resetMysqlDatabase (rootUsername, rootPassword, config = {}) {
+      const escape = (value) => `${'\\`'}${value}${'\\`'}`
+      return co(function * () {
+        let { username, password, database, host = 'localhost' } = config
+        rootUsername = rootUsername || config.rootUsername || 'root'
+        rootPassword = rootPassword || config.rootPassword
+        let sql = `DROP DATABASE IF EXISTS ${database}; CREATE DATABASE IF NOT EXISTS ${database}; GRANT ALL ON ${escape(database)}.* TO '${username}'@'%' IDENTIFIED BY '${password}'`
+        let command = `mysql -u${rootUsername} --host=${host} ${host === 'localhost' ? '' : '--protocol=tcp '}-e"${sql}"`
+        let env = Object.assign({}, process.env)
+        if (rootPassword) {
+          env.MYSQL_PWD = rootPassword
+        }
+        let { stdout, stderr } = yield new Promise((resolve, reject) =>
+          exec(command, { env }, (err, stdout, stderr) =>
+            err ? reject(err) : resolve({ stdout, stderr })
+          )
+        )
+        if (stdout) {
+          console.log(stdout)
+        }
+        if (stderr) {
+          console.error(stderr)
+        }
+      })
+    }
+
+    const DB_ROOT_USER = 'root'
+    const DB_ROOT_PASSWORD = ''
+    const DB_USER = 'hoge'
+    const DB_PASSWORD = 'fuge'
+    const DATABASE = 'clay_driver_sequelize_test'
+    yield resetMysqlDatabase(DB_ROOT_USER, DB_ROOT_PASSWORD, {
+      database: DATABASE,
+      username: DB_USER,
+      password: DB_PASSWORD
+    })
+
+    let driver = new SequelizeDriver(DATABASE, DB_ROOT_USER, DB_ROOT_PASSWORD, {
+      dialect: 'mysql',
+      benchmark: true,
+      logging: false
+    })
+    yield driver.drop('Box')
+
+    const NUMBER_OF_ENTITY = 100
+    const NUMBER_OF_ATTRIBUTE = 20
+    let ids = []
+
+    // Create
+    {
+      let startAt = new Date()
+      let creatingQueue = []
+      for (let i = 0; i < NUMBER_OF_ENTITY; i++) {
+        let attributes = new Array(NUMBER_OF_ATTRIBUTE - 1)
+          .fill(null)
+          .reduce((attr, _, j) => Object.assign(attr, {
+            [`attr-${j}`]: j
+          }), { index: i })
+        creatingQueue.push(driver.create('Box', attributes))
+      }
+      ids.push(
+        ...(yield Promise.all(creatingQueue)).map(({ id }) => id)
+      )
+      console.log(`Took ${new Date() - startAt}ms for ${NUMBER_OF_ENTITY} entities, ${NUMBER_OF_ATTRIBUTE} attributes to create`)
+    }
+
+    yield driver.close()
   }))
 })
 
