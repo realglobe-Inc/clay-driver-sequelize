@@ -437,7 +437,7 @@ describe('sequelize-driver', function () {
     yield driver.drop('Box')
 
     const NUMBER_OF_ENTITY = 100
-    const NUMBER_OF_ATTRIBUTE = 30
+    const NUMBER_OF_ATTRIBUTE = 10
     let ids = []
 
     // Create
