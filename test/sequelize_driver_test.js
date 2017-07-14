@@ -7,7 +7,7 @@
 const SequelizeDriver = require('../lib/sequelize_driver.js')
 const clayDriverTests = require('clay-driver-tests')
 const clayLump = require('clay-lump')
-const {EOL} = require('os')
+const { EOL } = require('os')
 const { ok, equal, deepEqual, strictEqual } = require('assert')
 const path = require('path')
 const { exec } = require('child_process')
@@ -347,7 +347,7 @@ describe('sequelize-driver', function () {
     })
     yield driver.drop('Box')
 
-    const NUMBER_OF_ENTITY = 100
+    const NUMBER_OF_ENTITY = 20
     const NUMBER_OF_ATTRIBUTE = 20
     let ids = []
 
@@ -437,14 +437,15 @@ describe('sequelize-driver', function () {
     yield driver.drop('Box')
 
     const NUMBER_OF_ENTITY = 100
-    const NUMBER_OF_ATTRIBUTE = 20
+    const NUMBER_OF_ATTRIBUTE = 30
     let ids = []
 
     // Create
     {
       let startAt = new Date()
       let creatingQueue = []
-      for (let i = 0; i < NUMBER_OF_ENTITY; i++) {
+      let indexes = new Array(NUMBER_OF_ENTITY).fill(null).map((_, i) => i)
+      for (const i of indexes) {
         let attributes = new Array(NUMBER_OF_ATTRIBUTE - 1)
           .fill(null)
           .reduce((attr, _, j) => Object.assign(attr, {
