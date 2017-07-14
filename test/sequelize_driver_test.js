@@ -18,7 +18,7 @@ const rimraf = require('rimraf')
 const co = require('co')
 
 describe('sequelize-driver', function () {
-  this.timeout(30000)
+  this.timeout(50000)
   let storage01 = `${__dirname}/../tmp/testing-driver.db`
   let storage02 = `${__dirname}/../tmp/testing-driver-2.db`
   let storage03 = `${__dirname}/../tmp/testing-driver-3.db`
