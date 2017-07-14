@@ -7,9 +7,11 @@
 const SequelizeDriver = require('../lib/sequelize_driver.js')
 const clayDriverTests = require('clay-driver-tests')
 const clayLump = require('clay-lump')
+const {EOL} = require('os')
 const { ok, equal, deepEqual, strictEqual } = require('assert')
 const path = require('path')
 const { exec } = require('child_process')
+const fs = require('fs')
 const mkdirp = require('mkdirp')
 const rimraf = require('rimraf')
 
@@ -336,11 +338,12 @@ describe('sequelize-driver', function () {
   }))
 
   it('A lot of CRUD', () => co(function * () {
-    let driver = new SequelizeDriver('hoge', '', '', {
+    const log = fs.createWriteStream(`${__dirname}/../tmp/a-lot-of-CRUD.log`)
+    const driver = new SequelizeDriver('hoge', '', '', {
       storage: storage09,
       dialect: 'sqlite',
       benchmark: true,
-      logging: false
+      logging: (line) => log.write(line + EOL)
     })
     yield driver.drop('Box')
 
@@ -384,6 +387,8 @@ describe('sequelize-driver', function () {
     }
 
     yield driver.close()
+
+    log.end()
   }))
 
   it('A lot of CRUD on mysql', () => co(function * () {
