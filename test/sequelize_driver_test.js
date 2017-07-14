@@ -7,16 +7,18 @@
 const SequelizeDriver = require('../lib/sequelize_driver.js')
 const clayDriverTests = require('clay-driver-tests')
 const clayLump = require('clay-lump')
+const { EOL } = require('os')
 const { ok, equal, deepEqual, strictEqual } = require('assert')
 const path = require('path')
 const { exec } = require('child_process')
+const fs = require('fs')
 const mkdirp = require('mkdirp')
 const rimraf = require('rimraf')
 
 const co = require('co')
 
 describe('sequelize-driver', function () {
-  this.timeout(30000)
+  this.timeout(50000)
   let storage01 = `${__dirname}/../tmp/testing-driver.db`
   let storage02 = `${__dirname}/../tmp/testing-driver-2.db`
   let storage03 = `${__dirname}/../tmp/testing-driver-3.db`
@@ -108,7 +110,17 @@ describe('sequelize-driver', function () {
 
     yield driver.update('User', created2.id, { username: 'hogehoge' })
 
+    {
+      let beforeDestroy = yield driver.one('User', created3.id)
+      ok(beforeDestroy)
+    }
+
     yield driver.destroy('User', created3.id)
+
+    {
+      let afterDestroy = yield driver.one('User', created3.id)
+      ok(!afterDestroy)
+    }
 
     {
       let byId = yield driver.list('User', { filter: { id: created3.id } })
@@ -326,16 +338,17 @@ describe('sequelize-driver', function () {
   }))
 
   it('A lot of CRUD', () => co(function * () {
-    let driver = new SequelizeDriver('hoge', '', '', {
+    const log = fs.createWriteStream(`${__dirname}/../tmp/a-lot-of-CRUD.log`)
+    const driver = new SequelizeDriver('hoge', '', '', {
       storage: storage09,
       dialect: 'sqlite',
       benchmark: true,
-      logging: false
+      logging: (line) => log.write(line + EOL)
     })
     yield driver.drop('Box')
 
-    const NUMBER_OF_ENTITY = 100
-    const NUMBER_OF_ATTRIBUTE = 10
+    const NUMBER_OF_ENTITY = 20
+    const NUMBER_OF_ATTRIBUTE = 20
     let ids = []
 
     // Create
@@ -358,18 +371,24 @@ describe('sequelize-driver', function () {
     // Update
     {
       let startAt = new Date()
+      let updateQueue = []
       for (let id of ids) {
         let attributes = new Array(NUMBER_OF_ATTRIBUTE - 1)
           .fill(null)
           .reduce((attr, _, j) => Object.assign(attr, {
             [`attr-${j}`]: `${j}-updated`
           }), {})
-        yield driver.update('Box', id, attributes)
+        updateQueue.push(
+          driver.update('Box', id, attributes)
+        )
       }
+      yield Promise.all(updateQueue)
       console.log(`Took ${new Date() - startAt}ms for ${NUMBER_OF_ENTITY} entities, ${NUMBER_OF_ATTRIBUTE} attributes to update`)
     }
 
     yield driver.close()
+
+    log.end()
   }))
 
   it('A lot of CRUD on mysql', () => co(function * () {
@@ -425,7 +444,8 @@ describe('sequelize-driver', function () {
     {
       let startAt = new Date()
       let creatingQueue = []
-      for (let i = 0; i < NUMBER_OF_ENTITY; i++) {
+      let indexes = new Array(NUMBER_OF_ENTITY).fill(null).map((_, i) => i)
+      for (const i of indexes) {
         let attributes = new Array(NUMBER_OF_ATTRIBUTE - 1)
           .fill(null)
           .reduce((attr, _, j) => Object.assign(attr, {
@@ -437,6 +457,25 @@ describe('sequelize-driver', function () {
         ...(yield Promise.all(creatingQueue)).map(({ id }) => id)
       )
       console.log(`Took ${new Date() - startAt}ms for ${NUMBER_OF_ENTITY} entities, ${NUMBER_OF_ATTRIBUTE} attributes to create`)
+    }
+    // Update
+    {
+      for (let i = 0; i < 2; i++) {
+        let startAt = new Date()
+        let updateQueue = []
+        for (let id of ids) {
+          let attributes = new Array(NUMBER_OF_ATTRIBUTE - 1)
+            .fill(null)
+            .reduce((attr, _, j) => Object.assign(attr, {
+              [`attr-${j}`]: `${j}-updated-${i}`
+            }), {})
+          updateQueue.push(
+            driver.update('Box', id, attributes)
+          )
+        }
+        yield Promise.all(updateQueue)
+        console.log(`Took ${new Date() - startAt}ms for ${NUMBER_OF_ENTITY} entities, ${NUMBER_OF_ATTRIBUTE} attributes to update`)
+      }
     }
 
     yield driver.close()
