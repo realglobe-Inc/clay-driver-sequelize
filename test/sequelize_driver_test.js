@@ -26,6 +26,7 @@ describe('sequelize-driver', function () {
   let storage07 = `${__dirname}/../tmp/testing-driver-7.db`
   let storage08 = `${__dirname}/../tmp/testing-driver-8.db`
   let storage09 = `${__dirname}/../tmp/testing-driver-9.db`
+  let storage10 = `${__dirname}/../tmp/testing-driver-10.db`
 
   before(() => co(function * () {
     let storages = [
@@ -37,7 +38,8 @@ describe('sequelize-driver', function () {
       storage06,
       storage07,
       storage08,
-      storage09
+      storage09,
+      storage10
     ]
     for (let storage of storages) {
       rimraf.sync(storage)
@@ -438,6 +440,21 @@ describe('sequelize-driver', function () {
     }
 
     yield driver.close()
+  }))
+
+  it('skip duplicate update', () => co(function * () {
+    let driver = new SequelizeDriver('hoge', '', '', {
+      storage: storage10,
+      dialect: 'sqlite',
+      benchmark: true,
+      logging: false
+    })
+
+    let entity = yield driver.create('Color', { name: 'red', code: '#E11' })
+    equal(entity.code, '#E11')
+    yield driver.update('Color', entity.id, { code: '#F11', name: 'red' })
+    entity = yield driver.one('Color', entity.id)
+    equal(entity.code, '#F11')
   }))
 })
 
