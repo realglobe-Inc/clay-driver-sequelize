@@ -1,466 +1,204 @@
 {
-  "functions": [
-    {
-      "name": "create",
-      "access": "",
-      "virtual": false,
-      "description": "Create driver instance",
-      "parameters": [
+    "functions": [
         {
-          "name": "args",
-          "type": "*",
-          "description": "",
-          "default": "",
-          "optional": "",
-          "nullable": ""
+            "name": "create",
+            "access": "",
+            "virtual": false,
+            "description": "Create driver instance",
+            "parameters": [
+                {
+                    "name": "args",
+                    "type": "*",
+                    "description": "",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                }
+            ],
+            "examples": [],
+            "returns": {
+                "type": "SequelizeDriver",
+                "description": ""
+            }
+        },
+        {
+            "name": "create",
+            "access": "",
+            "virtual": false,
+            "description": "Create driver instance",
+            "parameters": [
+                {
+                    "name": "args",
+                    "type": "*",
+                    "description": "",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                }
+            ],
+            "examples": [],
+            "returns": {
+                "type": "SequelizeDriver",
+                "description": ""
+            }
+        },
+        {
+            "name": "queuePool",
+            "access": "",
+            "virtual": false,
+            "description": "Create a queue pool",
+            "parameters": [],
+            "examples": []
+        },
+        {
+            "name": "entityAttributeModel",
+            "access": "",
+            "virtual": false,
+            "description": "Define entity attribute model",
+            "parameters": [],
+            "examples": []
+        },
+        {
+            "name": "entityModel",
+            "access": "",
+            "virtual": false,
+            "description": "Define entity model",
+            "parameters": [
+                {
+                    "name": "define",
+                    "type": "function",
+                    "description": "Definer",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                }
+            ],
+            "examples": [],
+            "returns": {
+                "type": "Object",
+                "description": "Defined model"
+            }
+        },
+        {
+            "name": "resourceModel",
+            "access": "",
+            "virtual": false,
+            "description": "Define resource model",
+            "parameters": [
+                {
+                    "name": "define",
+                    "type": "function",
+                    "description": "Definer",
+                    "default": "",
+                    "optional": "",
+                    "nullable": ""
+                }
+            ],
+            "examples": [],
+            "returns": {
+                "type": "Object",
+                "description": "Defined model"
+            }
         }
-      ],
-      "examples": [],
-      "returns": {
-        "type": "SequelizeDriver",
-        "description": ""
-      }
-    }
-  ],
-  "classes": [
-    {
-      "name": "SequelizeDriver",
-      "description": "",
-      "extends": [
-        "Driver"
-      ],
-      "access": "",
-      "virtual": false,
-      "fires": "",
-      "constructor": {
-        "name": "SequelizeDriver",
-        "description": "Abstract driver",
-        "parameters": [
-          {
-            "name": "database",
-            "type": "string",
-            "description": "Name of database",
-            "default": "",
-            "optional": "",
-            "nullable": ""
-          },
-          {
-            "name": "username",
-            "type": "string",
-            "description": "Database username",
-            "default": "",
-            "optional": "",
-            "nullable": ""
-          },
-          {
-            "name": "password",
-            "type": "string",
-            "description": "Database password",
-            "default": "",
-            "optional": "",
-            "nullable": ""
-          },
-          {
-            "name": "options",
-            "type": "Object",
-            "description": "Optional settings",
-            "default": "{}",
-            "optional": true,
-            "nullable": ""
-          }
-        ],
-        "examples": []
-      },
-      "functions": [
+    ],
+    "classes": [
         {
-          "name": "one",
-          "access": "",
-          "virtual": false,
-          "description": "Get single entity from resource",
-          "parameters": [
-            {
-              "name": "resourceName",
-              "type": "string",
-              "description": "Name of resource",
-              "default": "",
-              "optional": "",
-              "nullable": ""
-            },
-            {
-              "name": "id",
-              "type": "ClayId",
-              "description": "Resource id",
-              "default": "",
-              "optional": "",
-              "nullable": ""
+            "name": "SequelizeDriver",
+            "description": "",
+            "extends": [
+                "Driver"
+            ],
+            "access": "",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "SequelizeDriver",
+                "description": "Abstract driver",
+                "parameters": [
+                    {
+                        "name": "database",
+                        "type": "string",
+                        "description": "Name of database",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    },
+                    {
+                        "name": "username",
+                        "type": "string",
+                        "description": "Database username",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    },
+                    {
+                        "name": "password",
+                        "type": "string",
+                        "description": "Database password",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    },
+                    {
+                        "name": "options",
+                        "type": "Object",
+                        "description": "Optional settings",
+                        "default": "{}",
+                        "optional": true,
+                        "nullable": ""
+                    }
+                ],
+                "examples": []
             }
-          ],
-          "examples": [],
-          "returns": {
-            "type": "Promise.<ClayEntity>",
-            "description": "Found resource"
-          }
         },
         {
-          "name": "list",
-          "access": "",
-          "virtual": false,
-          "description": "List entities from resource",
-          "parameters": [
-            {
-              "name": "resourceName",
-              "type": "string",
-              "description": "Name of resource",
-              "default": "",
-              "optional": "",
-              "nullable": ""
-            },
-            {
-              "name": "condition",
-              "type": "ListCondition",
-              "description": "List condition query",
-              "default": "{}",
-              "optional": true,
-              "nullable": ""
+            "name": "SequelizeDriver",
+            "description": "",
+            "extends": [
+                "Driver"
+            ],
+            "access": "",
+            "virtual": false,
+            "fires": "",
+            "constructor": {
+                "name": "SequelizeDriver",
+                "description": "Abstract driver",
+                "parameters": [
+                    {
+                        "name": "database",
+                        "type": "string",
+                        "description": "Name of database",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    },
+                    {
+                        "name": "username",
+                        "type": "string",
+                        "description": "Database username",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    },
+                    {
+                        "name": "password",
+                        "type": "string",
+                        "description": "Database password",
+                        "default": "",
+                        "optional": "",
+                        "nullable": ""
+                    },
+                    {
+                        "name": "options",
+                        "type": "Object",
+                        "description": "Optional settings",
+                        "default": "{}",
+                        "optional": true,
+                        "nullable": ""
+                    }
+                ],
+                "examples": []
             }
-          ],
-          "examples": [],
-          "returns": {
-            "type": "Promise.<ClayCollection>",
-            "description": "Found resource collection"
-          }
-        },
-        {
-          "name": "create",
-          "access": "",
-          "virtual": false,
-          "description": "Create a new entity with resource",
-          "parameters": [
-            {
-              "name": "resourceName",
-              "type": "string",
-              "description": "Name of resource",
-              "default": "",
-              "optional": "",
-              "nullable": ""
-            },
-            {
-              "name": "attributes",
-              "type": "Object",
-              "description": "Resource attributes to create",
-              "default": "",
-              "optional": "",
-              "nullable": ""
-            }
-          ],
-          "examples": [],
-          "returns": {
-            "type": "Promise.<ClayEntity>",
-            "description": "Created data"
-          }
-        },
-        {
-          "name": "update",
-          "access": "",
-          "virtual": false,
-          "description": "Update an existing entity in resource",
-          "parameters": [
-            {
-              "name": "resourceName",
-              "type": "string",
-              "description": "Name of resource",
-              "default": "",
-              "optional": "",
-              "nullable": ""
-            },
-            {
-              "name": "id",
-              "type": "ClayId",
-              "description": "Resource id",
-              "default": "",
-              "optional": "",
-              "nullable": ""
-            },
-            {
-              "name": "attributes",
-              "type": "Object",
-              "description": "Resource attributes to update",
-              "default": "",
-              "optional": "",
-              "nullable": ""
-            }
-          ],
-          "examples": [],
-          "returns": {
-            "type": "Promise.<ClayEntity>",
-            "description": "Updated data"
-          }
-        },
-        {
-          "name": "destroy",
-          "access": "",
-          "virtual": false,
-          "description": "Delete a entity resource",
-          "parameters": [
-            {
-              "name": "resourceName",
-              "type": "string",
-              "description": "Name of resource",
-              "default": "",
-              "optional": "",
-              "nullable": ""
-            },
-            {
-              "name": "id",
-              "type": "ClayId",
-              "description": "Resource id",
-              "default": "",
-              "optional": "",
-              "nullable": ""
-            }
-          ],
-          "examples": [],
-          "returns": {
-            "type": "Promise.<number>",
-            "description": "Destroyed count (0 or 1)"
-          }
-        },
-        {
-          "name": "drop",
-          "access": "",
-          "virtual": false,
-          "description": "Drop resource",
-          "parameters": [
-            {
-              "name": "resourceName",
-              "type": "string",
-              "description": "Name of resource",
-              "default": "",
-              "optional": "",
-              "nullable": ""
-            }
-          ],
-          "examples": [],
-          "returns": {
-            "type": "Promise.<boolean>",
-            "description": "False if there were nothing to drop"
-          }
-        },
-        {
-          "name": "resources",
-          "access": "",
-          "virtual": false,
-          "description": "List resources",
-          "parameters": [],
-          "examples": [],
-          "returns": {
-            "type": "Promise.<Resource>",
-            "description": "Resources"
-          }
         }
-      ]
-    },
-    {
-      "name": "Driver",
-      "description": "",
-      "extends": [],
-      "access": "",
-      "virtual": true,
-      "fires": "",
-      "constructor": {
-        "name": "Driver",
-        "description": "Abstract driver",
-        "parameters": [],
-        "examples": []
-      },
-      "functions": [
-        {
-          "name": "one",
-          "access": "",
-          "virtual": false,
-          "description": "Get single entity from resource",
-          "parameters": [
-            {
-              "name": "resourceName",
-              "type": "string",
-              "description": "Name of resource",
-              "default": "",
-              "optional": "",
-              "nullable": ""
-            },
-            {
-              "name": "id",
-              "type": "ClayId",
-              "description": "Resource id",
-              "default": "",
-              "optional": "",
-              "nullable": ""
-            }
-          ],
-          "examples": [],
-          "returns": {
-            "type": "Promise.<ClayEntity>",
-            "description": "Found resource"
-          }
-        },
-        {
-          "name": "list",
-          "access": "",
-          "virtual": false,
-          "description": "List entities from resource",
-          "parameters": [
-            {
-              "name": "resourceName",
-              "type": "string",
-              "description": "Name of resource",
-              "default": "",
-              "optional": "",
-              "nullable": ""
-            },
-            {
-              "name": "condition",
-              "type": "ListCondition",
-              "description": "List condition query",
-              "default": "{}",
-              "optional": true,
-              "nullable": ""
-            }
-          ],
-          "examples": [],
-          "returns": {
-            "type": "Promise.<ClayCollection>",
-            "description": "Found resource collection"
-          }
-        },
-        {
-          "name": "create",
-          "access": "",
-          "virtual": false,
-          "description": "Create a new entity with resource",
-          "parameters": [
-            {
-              "name": "resourceName",
-              "type": "string",
-              "description": "Name of resource",
-              "default": "",
-              "optional": "",
-              "nullable": ""
-            },
-            {
-              "name": "attributes",
-              "type": "Object",
-              "description": "Resource attributes to create",
-              "default": "",
-              "optional": "",
-              "nullable": ""
-            }
-          ],
-          "examples": [],
-          "returns": {
-            "type": "Promise.<ClayEntity>",
-            "description": "Created data"
-          }
-        },
-        {
-          "name": "update",
-          "access": "",
-          "virtual": false,
-          "description": "Update an existing entity in resource",
-          "parameters": [
-            {
-              "name": "resourceName",
-              "type": "string",
-              "description": "Name of resource",
-              "default": "",
-              "optional": "",
-              "nullable": ""
-            },
-            {
-              "name": "id",
-              "type": "ClayId",
-              "description": "Resource id",
-              "default": "",
-              "optional": "",
-              "nullable": ""
-            },
-            {
-              "name": "attributes",
-              "type": "Object",
-              "description": "Resource attributes to update",
-              "default": "",
-              "optional": "",
-              "nullable": ""
-            }
-          ],
-          "examples": [],
-          "returns": {
-            "type": "Promise.<ClayEntity>",
-            "description": "Updated data"
-          }
-        },
-        {
-          "name": "destroy",
-          "access": "",
-          "virtual": false,
-          "description": "Delete a entity resource",
-          "parameters": [
-            {
-              "name": "resourceName",
-              "type": "string",
-              "description": "Name of resource",
-              "default": "",
-              "optional": "",
-              "nullable": ""
-            },
-            {
-              "name": "id",
-              "type": "ClayId",
-              "description": "Resource id",
-              "default": "",
-              "optional": "",
-              "nullable": ""
-            }
-          ],
-          "examples": [],
-          "returns": {
-            "type": "Promise.<number>",
-            "description": "Destroyed count (0 or 1)"
-          }
-        },
-        {
-          "name": "drop",
-          "access": "",
-          "virtual": false,
-          "description": "Drop resource",
-          "parameters": [
-            {
-              "name": "resourceName",
-              "type": "string",
-              "description": "Name of resource",
-              "default": "",
-              "optional": "",
-              "nullable": ""
-            }
-          ],
-          "examples": [],
-          "returns": {
-            "type": "Promise.<boolean>",
-            "description": "False if there were nothing to drop"
-          }
-        },
-        {
-          "name": "resources",
-          "access": "",
-          "virtual": false,
-          "description": "List resources",
-          "parameters": [],
-          "examples": [],
-          "returns": {
-            "type": "Promise.<Resource>",
-            "description": "Resources"
-          }
-        }
-      ]
-    }
-  ]
+    ]
 }
