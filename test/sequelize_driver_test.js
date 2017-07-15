@@ -431,14 +431,14 @@ describe('sequelize-driver', function () {
     let driver = new SequelizeDriver(DATABASE, DB_ROOT_USER, DB_ROOT_PASSWORD, {
       dialect: 'mysql',
       benchmark: true,
-      logging: false
-      // logging: console.log
+      // logging: false
+      logging: console.log
     })
     await driver.drop('Box')
 
     const NUMBER_OF_ENTITY = 100
-    const NUMBER_OF_ATTRIBUTE = 10
-    for (let n = 0; n < 10; n++) {
+    const NUMBER_OF_ATTRIBUTE = 32
+    for (let n = 0; n < 2; n++) {
       let ids = []
       // Create
       {
@@ -449,7 +449,7 @@ describe('sequelize-driver', function () {
           let attributes = new Array(NUMBER_OF_ATTRIBUTE - 1)
             .fill(null)
             .reduce((attr, _, j) => Object.assign(attr, {
-              [`attr-${j}`]: j
+              [`attr-${j}`]: `value-of-${j}`
             }), { index: i })
           creatingQueue.push(driver.create('Box', attributes))
         }
@@ -457,7 +457,11 @@ describe('sequelize-driver', function () {
         ids.push(
           ...(result).map(({ id }) => id)
         )
-        console.log(`Took ${new Date() - startAt}ms for ${NUMBER_OF_ENTITY} entities, ${NUMBER_OF_ATTRIBUTE} attributes to create`)
+        console.log(`
+              Took ${new Date() - startAt}ms
+              for ${NUMBER_OF_ENTITY} entities, ${NUMBER_OF_ATTRIBUTE}
+              attributes to
+              create`)
       }
       // Update
       {
