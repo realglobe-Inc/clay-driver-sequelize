@@ -18,7 +18,7 @@ const rimraf = require('rimraf')
 const co = require('co')
 
 describe('sequelize-driver', function () {
-  this.timeout(50000)
+  this.timeout(80000)
   let storage01 = `${__dirname}/../tmp/testing-driver.db`
   let storage02 = `${__dirname}/../tmp/testing-driver-2.db`
   let storage03 = `${__dirname}/../tmp/testing-driver-3.db`
@@ -443,9 +443,9 @@ describe('sequelize-driver', function () {
     yield driver.drop('Box')
 
     const NUMBER_OF_ENTITY = 100
-    const NUMBER_OF_ATTRIBUTE = 50
+    const NUMBER_OF_ATTRIBUTE = 20
 
-    for (let n = 0; n < 10; n++) {
+    for (let n = 0; n < 2; n++) {
       const ids = []
 
       // Create
