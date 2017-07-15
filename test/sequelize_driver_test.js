@@ -16,7 +16,7 @@ const mkdirp = require('mkdirp')
 const rimraf = require('rimraf')
 
 describe('sequelize-driver', function () {
-  this.timeout(50000)
+  this.timeout(500000)
   let storage01 = `${__dirname}/../tmp/testing-driver.db`
   let storage02 = `${__dirname}/../tmp/testing-driver-2.db`
   let storage03 = `${__dirname}/../tmp/testing-driver-3.db`
@@ -431,52 +431,52 @@ describe('sequelize-driver', function () {
     let driver = new SequelizeDriver(DATABASE, DB_ROOT_USER, DB_ROOT_PASSWORD, {
       dialect: 'mysql',
       benchmark: true,
-      // logging: false
-      logging: console.log
+      logging: false
+      // logging: console.log
     })
     await driver.drop('Box')
 
     const NUMBER_OF_ENTITY = 100
     const NUMBER_OF_ATTRIBUTE = 10
-    let ids = []
-
-    // Create
-    {
-      let startAt = new Date()
-      let creatingQueue = []
-      let indexes = new Array(NUMBER_OF_ENTITY).fill(null).map((_, i) => i)
-      for (const i of indexes) {
-        let attributes = new Array(NUMBER_OF_ATTRIBUTE - 1)
-          .fill(null)
-          .reduce((attr, _, j) => Object.assign(attr, {
-            [`attr-${j}`]: j
-          }), { index: i })
-        creatingQueue.push(driver.create('Box', attributes))
-      }
-      const result = await Promise.all(creatingQueue)
-      ids.push(
-        ...(result).map(({ id }) => id)
-      )
-      console.log(`Took ${new Date() - startAt}ms for ${NUMBER_OF_ENTITY} entities, ${NUMBER_OF_ATTRIBUTE} attributes to create`)
-    }
-    return
-    // Update
-    {
-      for (let i = 0; i < 2; i++) {
+    for (let n = 0; n < 10; n++) {
+      let ids = []
+      // Create
+      {
         let startAt = new Date()
-        let updateQueue = []
-        for (let id of ids) {
+        let creatingQueue = []
+        let indexes = new Array(NUMBER_OF_ENTITY).fill(null).map((_, i) => i)
+        for (const i of indexes) {
           let attributes = new Array(NUMBER_OF_ATTRIBUTE - 1)
             .fill(null)
             .reduce((attr, _, j) => Object.assign(attr, {
-              [`attr-${j}`]: `${j}-updated-${i}`
-            }), {})
-          updateQueue.push(
-            driver.update('Box', id, attributes)
-          )
+              [`attr-${j}`]: j
+            }), { index: i })
+          creatingQueue.push(driver.create('Box', attributes))
         }
-        await Promise.all(updateQueue)
-        console.log(`Took ${new Date() - startAt}ms for ${NUMBER_OF_ENTITY} entities, ${NUMBER_OF_ATTRIBUTE} attributes to update`)
+        const result = await Promise.all(creatingQueue)
+        ids.push(
+          ...(result).map(({ id }) => id)
+        )
+        console.log(`Took ${new Date() - startAt}ms for ${NUMBER_OF_ENTITY} entities, ${NUMBER_OF_ATTRIBUTE} attributes to create`)
+      }
+      // Update
+      {
+        for (let i = 0; i < 2; i++) {
+          let startAt = new Date()
+          let updateQueue = []
+          for (let id of ids) {
+            let attributes = new Array(NUMBER_OF_ATTRIBUTE - 1)
+              .fill(null)
+              .reduce((attr, _, j) => Object.assign(attr, {
+                [`attr-${j}`]: `${j}-updated-${i}`
+              }), {})
+            updateQueue.push(
+              driver.update('Box', id, attributes)
+            )
+          }
+          await Promise.all(updateQueue)
+          console.log(`Took ${new Date() - startAt}ms for ${NUMBER_OF_ENTITY} entities, ${NUMBER_OF_ATTRIBUTE} attributes to update`)
+        }
       }
     }
 
