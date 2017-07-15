@@ -431,8 +431,8 @@ describe('sequelize-driver', function () {
     let driver = new SequelizeDriver(DATABASE, DB_ROOT_USER, DB_ROOT_PASSWORD, {
       dialect: 'mysql',
       benchmark: true,
-      // logging: false
-      logging: console.log
+      logging: false
+      // logging: console.log
     })
     await driver.drop('Box')
 
