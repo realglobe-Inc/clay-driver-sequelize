@@ -342,7 +342,7 @@ describe('sequelize-driver', function () {
     )
   }))
 
-  it('A lot of CRUD', () => co(function * () {
+  it('A lot of CRUD on sqlite', () => co(function * () {
     const log = fs.createWriteStream(`${__dirname}/../tmp/a-lot-of-CRUD.log`)
     const driver = new SequelizeDriver('hoge', '', '', {
       storage: storage09,
@@ -352,8 +352,8 @@ describe('sequelize-driver', function () {
     })
     yield driver.drop('Box')
 
-    const NUMBER_OF_ENTITY = 20
-    const NUMBER_OF_ATTRIBUTE = 20
+    const NUMBER_OF_ENTITY = 50
+    const NUMBER_OF_ATTRIBUTE = 10
     let ids = []
 
     // Create
@@ -361,7 +361,7 @@ describe('sequelize-driver', function () {
       let startAt = new Date()
       let creatingQueue = []
       for (let i = 0; i < NUMBER_OF_ENTITY; i++) {
-        let attributes = new Array(NUMBER_OF_ATTRIBUTE - 1)
+        const attributes = new Array(NUMBER_OF_ATTRIBUTE - 1)
           .fill(null)
           .reduce((attr, _, j) => Object.assign(attr, {
             [`attr-${j}`]: j
@@ -437,6 +437,7 @@ describe('sequelize-driver', function () {
     let driver = new SequelizeDriver(DATABASE, DB_ROOT_USER, DB_ROOT_PASSWORD, {
       dialect: 'mysql',
       benchmark: true,
+      // logging: console.log
       logging: false
     })
     yield driver.drop('Box')
