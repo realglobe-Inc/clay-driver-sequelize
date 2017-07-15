@@ -81,11 +81,16 @@ describe('sequelize-driver', function () {
     ok(created2.id !== created.id)
     equal(created.username, 'okunishinishi')
 
+    equal(created2.$$as, 'User')
+    ok(created2.$$at)
+
     {
       let list01 = yield driver.list('User', {
         filter: {}
       })
       equal(String(list01.entities[ 0 ].id), String(created.id))
+      equal(list01.entities[ 0 ].$$as, 'User')
+      ok(list01.entities[ 0 ].$$at)
       ok(list01.meta)
       deepEqual(list01.meta, { offset: 0, limit: 100, total: 3, length: 3 })
 
