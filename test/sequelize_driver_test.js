@@ -443,47 +443,49 @@ describe('sequelize-driver', function () {
     yield driver.drop('Box')
 
     const NUMBER_OF_ENTITY = 100
-    const NUMBER_OF_ATTRIBUTE = 10
-    let ids = []
+    const NUMBER_OF_ATTRIBUTE = 50
 
-    // Create
-    {
-      let startAt = new Date()
-      let creatingQueue = []
-      let indexes = new Array(NUMBER_OF_ENTITY).fill(null).map((_, i) => i)
-      for (const i of indexes) {
-        let attributes = new Array(NUMBER_OF_ATTRIBUTE - 1)
-          .fill(null)
-          .reduce((attr, _, j) => Object.assign(attr, {
-            [`attr-${j}`]: j
-          }), { index: i })
-        creatingQueue.push(driver.create('Box', attributes))
-      }
-      ids.push(
-        ...(yield Promise.all(creatingQueue)).map(({ id }) => id)
-      )
-      console.log(`Took ${new Date() - startAt}ms for ${NUMBER_OF_ENTITY} entities, ${NUMBER_OF_ATTRIBUTE} attributes to create`)
-    }
-    // Update
-    {
-      for (let i = 0; i < 2; i++) {
-        let startAt = new Date()
-        let updateQueue = []
-        for (let id of ids) {
+    for (let n = 0; n < 10; n++) {
+      const ids = []
+
+      // Create
+      {
+        const startAt = new Date()
+        const creatingQueue = []
+        const indexes = new Array(NUMBER_OF_ENTITY).fill(null).map((_, i) => i)
+        for (const i of indexes) {
           let attributes = new Array(NUMBER_OF_ATTRIBUTE - 1)
             .fill(null)
             .reduce((attr, _, j) => Object.assign(attr, {
-              [`attr-${j}`]: `${j}-updated-${i}`
-            }), {})
-          updateQueue.push(
-            driver.update('Box', id, attributes)
-          )
+              [`attr-${j}`]: j
+            }), { index: i })
+          creatingQueue.push(driver.create('Box', attributes))
         }
-        yield Promise.all(updateQueue)
-        console.log(`Took ${new Date() - startAt}ms for ${NUMBER_OF_ENTITY} entities, ${NUMBER_OF_ATTRIBUTE} attributes to update`)
+        ids.push(
+          ...(yield Promise.all(creatingQueue)).map(({ id }) => id)
+        )
+        console.log(`Took ${new Date() - startAt}ms for ${NUMBER_OF_ENTITY} entities, ${NUMBER_OF_ATTRIBUTE} attributes to create`)
+      }
+      // Update
+      {
+        for (let i = 0; i < 2; i++) {
+          const updateQueue = []
+          const startAt = new Date()
+          for (let id of ids) {
+            let attributes = new Array(NUMBER_OF_ATTRIBUTE - 1)
+              .fill(null)
+              .reduce((attr, _, j) => Object.assign(attr, {
+                [`attr-${j}`]: `${j}-updated-${i}`
+              }), {})
+            updateQueue.push(
+              driver.update('Box', id, attributes)
+            )
+          }
+          yield Promise.all(updateQueue)
+          console.log(`Took ${new Date() - startAt}ms for ${NUMBER_OF_ENTITY} entities, ${NUMBER_OF_ATTRIBUTE} attributes to update`)
+        }
       }
     }
-
     yield driver.close()
   }))
 
