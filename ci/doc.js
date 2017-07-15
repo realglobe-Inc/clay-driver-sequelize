@@ -9,14 +9,13 @@
 process.chdir(`${__dirname}/..`)
 
 const apeTasking = require('ape-tasking')
-const co = require('co')
 const coz = require('coz')
 const { execSync } = require('child_process')
 const writeout = require('writeout')
 
 apeTasking.runTasks('build', [
   // Generate jsdoc.json
-  () => co(function * () {
+  async () => {
     let src = `lib/*.js ${require.resolve('clay-driver-base/lib/driver.js')}`
     let dest = 'jsdoc.json'
     let data = execSync(`
@@ -30,6 +29,6 @@ apeTasking.runTasks('build', [
     if (!result.skipped) {
       console.log(`File generated: ${result.filename}`)
     }
-  }),
+  },
   () => coz.render('doc/**/.*.bud')
 ], true)

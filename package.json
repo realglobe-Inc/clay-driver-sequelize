@@ -1,6 +1,6 @@
 {
   "name": "clay-driver-sequelize",
-  "version": "4.1.2",
+  "version": "5.0.0",
   "description": "Clay driver for Sequelize",
   "main": "lib",
   "browser": "ci/browser",
@@ -33,7 +33,6 @@
     "clay-list-pager": "^2.0.1",
     "clay-resource-name": "^4.0.1",
     "clay-serial": "^2.0.3",
-    "co": "^4.6.0",
     "continuation-local-storage": "^3.2.0",
     "objnest": "^3.0.9",
     "retry-as-promised": "^2.2.0",
@@ -65,7 +64,7 @@
     "writeout": "^2.2.0"
   },
   "engines": {
-    "node": ">=6",
+    "node": ">=7.6",
     "npm": ">=4"
   }
 }

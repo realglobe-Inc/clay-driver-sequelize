@@ -6,22 +6,22 @@
 
 const normalizer = require('../lib/helpers/normalizer.js')
 const assert = require('assert')
-const co = require('co')
+
 
 describe('normalizer', function () {
   this.timeout(3000)
 
-  before(() => co(function * () {
+  before(async () => {
 
-  }))
+  })
 
-  after(() => co(function * () {
+  after(async () => {
 
-  }))
+  })
 
-  it('Normalizer', () => co(function * () {
+  it('Normalizer', async () => {
 
-  }))
+  })
 })
 
 /* global describe, before, after, it */
