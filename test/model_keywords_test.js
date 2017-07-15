@@ -6,22 +6,22 @@
 
 const modelKeywords = require('../lib/constants/model_keywords.js')
 const assert = require('assert')
-const co = require('co')
+
 
 describe('model-keywords', function () {
   this.timeout(3000)
 
-  before(() => co(function * () {
+  before(async () => {
 
-  }))
+  })
 
-  after(() => co(function * () {
+  after(async () => {
 
-  }))
+  })
 
-  it('Model keywords', () => co(function * () {
+  it('Model keywords', async () => {
 
-  }))
+  })
 })
 
 /* global describe, before, after, it */

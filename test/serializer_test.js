@@ -6,22 +6,22 @@
 
 const serializer = require('../lib/helpers/serializer.js')
 const assert = require('assert')
-const co = require('co')
+
 
 describe('serializer', function () {
   this.timeout(3000)
 
-  before(() => co(function * () {
+  before(async () => {
 
-  }))
+  })
 
-  after(() => co(function * () {
+  after(async () => {
 
-  }))
+  })
 
-  it('Serializer', () => co(function * () {
+  it('Serializer', async () => {
 
-  }))
+  })
 })
 
 /* global describe, before, after, it */

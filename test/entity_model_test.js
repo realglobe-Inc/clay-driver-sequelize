@@ -6,22 +6,22 @@
 
 const entityModel = require('../lib/modeling/entity_model.js')
 const assert = require('assert')
-const co = require('co')
+
 
 describe('entity-model', function () {
   this.timeout(3000)
 
-  before(() => co(function * () {
+  before(async () => {
 
-  }))
+  })
 
-  after(() => co(function * () {
+  after(async () => {
 
-  }))
+  })
 
-  it('Entity model', () => co(function * () {
+  it('Entity model', async () => {
 
-  }))
+  })
 })
 
 /* global describe, before, after, it */
