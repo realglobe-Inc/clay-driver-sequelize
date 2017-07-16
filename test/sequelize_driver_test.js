@@ -117,7 +117,12 @@ describe('sequelize-driver', function () {
       let list05 = yield driver.list('User', {
         filter: { '__unknown_column__': 0 }
       })
-      console.log(list05)
+      deepEqual(list05.meta, { offset: 0, limit: 100, total: 3, length: 3 })
+
+      let list06 = yield driver.list('User', {
+        filter: { id: created2.id }
+      })
+      deepEqual(list06.meta, { offset: 0, limit: 100, total: 1, length: 1 })
     }
 
     yield driver.update('User', created2.id, { username: 'hogehoge' })
