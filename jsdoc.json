@@ -51,7 +51,7 @@
             "examples": []
         },
         {
-            "name": "entityAttributeModel",
+            "name": "attributeModel",
             "access": "",
             "virtual": false,
             "description": "Define entity attribute model",
