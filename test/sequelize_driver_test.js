@@ -538,13 +538,14 @@ describe('sequelize-driver', function () {
     })
     equal(created.payload.length, 1000)
 
-    for (const l of [ 0, 10, 2000 ]) {
-      await driver.update('Big', created.id, {
-        payload: new Array(l).fill('b').join('')
-      })
-
-      const one = await driver.one('Big', created.id)
-      equal(one.payload.length, l)
+    for (const l of [ 0, 10, 2000, 3 ]) {
+      {
+        await driver.update('Big', created.id, {
+          payload: new Array(l).fill('b').join('')
+        })
+        const one = await driver.one('Big', created.id)
+        equal(one.payload.length, l)
+      }
     }
   })
 })
