@@ -29,6 +29,7 @@ describe('sequelize-driver', function () {
   let storage08 = `${__dirname}/../tmp/testing-driver-8.db`
   let storage09 = `${__dirname}/../tmp/testing-driver-9.db`
   let storage10 = `${__dirname}/../tmp/testing-driver-10.db`
+  let storage11 = `${__dirname}/../tmp/testing-driver-11.db`
 
   before(() => co(function * () {
     let storages = [
@@ -41,7 +42,8 @@ describe('sequelize-driver', function () {
       storage07,
       storage08,
       storage09,
-      storage10
+      storage10,
+      storage11,
     ]
     for (let storage of storages) {
       rimraf.sync(storage)
@@ -396,7 +398,7 @@ describe('sequelize-driver', function () {
     log.end()
   }))
 
-  it('A lot of CRUD on mysql', () => co(function * () {
+  it('A lot of CRUD on mysql', async () => {
     function resetMysqlDatabase (rootUsername, rootPassword, config = {}) {
       const escape = (value) => `${'\\`'}${value}${'\\`'}`
       return co(function * () {
@@ -428,7 +430,7 @@ describe('sequelize-driver', function () {
     const DB_USER = 'hoge'
     const DB_PASSWORD = 'fuge'
     const DATABASE = 'clay_driver_sequelize_test'
-    yield resetMysqlDatabase(DB_ROOT_USER, DB_ROOT_PASSWORD, {
+    await resetMysqlDatabase(DB_ROOT_USER, DB_ROOT_PASSWORD, {
       database: DATABASE,
       username: DB_USER,
       password: DB_PASSWORD
@@ -440,7 +442,7 @@ describe('sequelize-driver', function () {
       // logging: console.log
       logging: false
     })
-    yield driver.drop('Box')
+    await driver.drop('Box')
 
     const NUMBER_OF_ENTITY = 100
     const NUMBER_OF_ATTRIBUTE = 20
@@ -462,7 +464,7 @@ describe('sequelize-driver', function () {
           creatingQueue.push(driver.create('Box', attributes))
         }
         ids.push(
-          ...(yield Promise.all(creatingQueue)).map(({ id }) => id)
+          ...(await Promise.all(creatingQueue)).map(({ id }) => id)
         )
         console.log(`Took ${new Date() - startAt}ms for ${NUMBER_OF_ENTITY} entities, ${NUMBER_OF_ATTRIBUTE} attributes to create`)
       }
@@ -481,13 +483,31 @@ describe('sequelize-driver', function () {
               driver.update('Box', id, attributes)
             )
           }
-          yield Promise.all(updateQueue)
+          await Promise.all(updateQueue)
           console.log(`Took ${new Date() - startAt}ms for ${NUMBER_OF_ENTITY} entities, ${NUMBER_OF_ATTRIBUTE} attributes to update`)
         }
       }
+
+      // large data
+      {
+        const created = await driver.create('Big', {
+          name: 'd1',
+          payload: new Array(1000).fill('a').join('')
+        })
+        equal(created.payload.length, 1000)
+
+        for (const l of [ 0, 10, 2000 ]) {
+          await driver.update('Big', created.id, {
+            payload: new Array(l).fill('b').join('')
+          })
+
+          const one = await driver.one('Big', created.id)
+          equal(one.payload.length, l)
+        }
+      }
     }
-    yield driver.close()
-  }))
+    await driver.close()
+  })
 
   it('skip duplicate update', () => co(function * () {
     let driver = new SequelizeDriver('hoge', '', '', {
@@ -503,6 +523,30 @@ describe('sequelize-driver', function () {
     entity = yield driver.one('Color', entity.id)
     equal(entity.code, '#F11')
   }))
+
+  it('Store large data', async () => {
+    let driver = new SequelizeDriver('foo', '', '', {
+      storage: storage11,
+      dialect: 'sqlite',
+      benchmark: true,
+      logging: false
+    })
+
+    const created = await driver.create('Big', {
+      name: 'd1',
+      payload: new Array(1000).fill('a').join('')
+    })
+    equal(created.payload.length, 1000)
+
+    for (const l of [ 0, 10, 2000 ]) {
+      await driver.update('Big', created.id, {
+        payload: new Array(l).fill('b').join('')
+      })
+
+      const one = await driver.one('Big', created.id)
+      equal(one.payload.length, l)
+    }
+  })
 })
 
 /* global describe, before, after, it */
