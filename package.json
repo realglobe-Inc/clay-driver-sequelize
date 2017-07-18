@@ -38,8 +38,7 @@
     "retry-as-promised": "^2.2.0",
     "sequelize": "^4.3.2",
     "sg-queue": "^1.1.4",
-    "stringcase": "^4.0.0",
-    "update": "^0.7.4"
+    "stringcase": "^4.0.0"
   },
   "devDependencies": {
     "ababel": "^2.0.1",
