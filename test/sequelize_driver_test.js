@@ -97,7 +97,7 @@ describe('sequelize-driver', function () {
       deepEqual(list01.meta, { offset: 0, limit: 100, total: 3, length: 3 })
 
       let list02 = yield driver.list('User', {
-        filter: { username: 'okunishinishi' }
+        filter: { $or: [{ username: 'okunishinishi' }] }
       })
       ok(list02.meta)
       deepEqual(list02.meta, { offset: 0, limit: 100, total: 1, length: 1 })

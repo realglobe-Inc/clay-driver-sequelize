@@ -25,6 +25,7 @@
   "dependencies": {
     "asenv": "^1.1.1",
     "asleep": "^1.0.3",
+    "asobj": "^1.5.0",
     "clay-collection": "^3.0.1",
     "clay-constants": "^3.0.2",
     "clay-driver-base": "^3.0.1",
