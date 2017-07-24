@@ -7,15 +7,13 @@
 const SequelizeDriver = require('../lib/sequelize_driver.js')
 const clayDriverTests = require('clay-driver-tests')
 const clayLump = require('clay-lump')
-const { EOL } = require('os')
-const { ok, equal, deepEqual, strictEqual } = require('assert')
+const {EOL} = require('os')
+const {ok, equal, deepEqual, strictEqual} = require('assert')
 const path = require('path')
-const { exec } = require('child_process')
+const {exec} = require('child_process')
 const fs = require('fs')
 const mkdirp = require('mkdirp')
 const rimraf = require('rimraf')
-
-const co = require('co')
 
 describe('sequelize-driver', function () {
   this.timeout(80000)
@@ -31,7 +29,7 @@ describe('sequelize-driver', function () {
   let storage10 = `${__dirname}/../tmp/testing-driver-10.db`
   let storage11 = `${__dirname}/../tmp/testing-driver-11.db`
 
-  before(() => co(function * () {
+  before(async () => {
     let storages = [
       storage01,
       storage02,
@@ -49,34 +47,35 @@ describe('sequelize-driver', function () {
       rimraf.sync(storage)
       mkdirp.sync(path.dirname(storage))
     }
-  }))
+  })
 
-  after(() => co(function * () {
+  after(async () => {
 
-  }))
+  })
 
-  it('Sequelize driver', () => co(function * () {
-    let driver = new SequelizeDriver('hoge', '', '', {
+  it('Sequelize driver', async () => {
+    const driver = new SequelizeDriver('hoge', '', '', {
       storage: storage01,
       dialect: 'sqlite',
       benchmark: true,
       logging: console.log
     })
-    let created = yield driver.create('User', {
+    const created = await driver.create('User', {
       username: 'okunishinishi',
       birthday: new Date('1985/08/26')
     })
     ok(created)
     ok(created.id)
-    let one = yield driver.one('User', created.id)
+    ok(created.$$num)
+    const one = await driver.one('User', created.id)
     equal(String(one.id), String(created.id))
 
-    let created2 = yield driver.create('User', {
+    const created2 = await driver.create('User', {
       username: 'hoge',
       birthday: new Date('1990/08/26')
     })
 
-    let created3 = yield driver.create('User', {
+    const created3 = await driver.create('User', {
       username: 'foge',
       birthday: new Date('1983/08/26')
     })
@@ -87,79 +86,85 @@ describe('sequelize-driver', function () {
     ok(created2.$$at)
 
     {
-      let list01 = yield driver.list('User', {
-        filter: {}
-      })
-      equal(String(list01.entities[ 0 ].id), String(created.id))
-      equal(list01.entities[ 0 ].$$as, 'User')
-      ok(list01.entities[ 0 ].$$at)
-      ok(list01.meta)
-      deepEqual(list01.meta, { offset: 0, limit: 100, total: 3, length: 3 })
-
-      let list02 = yield driver.list('User', {
-        filter: { $or: [{ username: 'okunishinishi' }] }
-      })
-      ok(list02.meta)
-      deepEqual(list02.meta, { offset: 0, limit: 100, total: 1, length: 1 })
-
-      let list03 = yield driver.list('User', {
-        sort: [ 'birthday' ]
-      })
-      equal(list03.entities[ 0 ].username, 'foge')
-
-      let list04 = yield driver.list('User', {
-        sort: [ '-birthday' ],
-        page: { size: 2, number: 1 }
-      })
-      equal(list04.entities[ 0 ].username, 'hoge')
-      deepEqual(list04.meta, { offset: 0, limit: 2, total: 3, length: 2 })
-
-      let list05 = yield driver.list('User', {
-        filter: { '__unknown_column__': 0 }
-      })
-      deepEqual(list05.meta, { offset: 0, limit: 100, total: 3, length: 3 })
-
-      let list06 = yield driver.list('User', {
-        filter: { id: created2.id }
-      })
-      deepEqual(list06.meta, { offset: 0, limit: 100, total: 1, length: 1 })
+      const {entities} = await driver.list('User', {filter: {$$num: created3.$$num}})
+      equal(entities.length, 1)
+      equal(String(entities[0].id), String(created3.id))
     }
 
-    yield driver.update('User', created2.id, { username: 'hogehoge' })
+    {
+      let list01 = await driver.list('User', {
+        filter: {}
+      })
+      equal(String(list01.entities[0].id), String(created.id))
+      equal(list01.entities[0].$$as, 'User')
+      ok(list01.entities[0].$$at)
+      ok(list01.meta)
+      deepEqual(list01.meta, {offset: 0, limit: 100, total: 3, length: 3})
+
+      let list02 = await driver.list('User', {
+        filter: {$or: [{username: 'okunishinishi'}]}
+      })
+      ok(list02.meta)
+      deepEqual(list02.meta, {offset: 0, limit: 100, total: 1, length: 1})
+
+      let list03 = await driver.list('User', {
+        sort: ['birthday']
+      })
+      equal(list03.entities[0].username, 'foge')
+
+      let list04 = await driver.list('User', {
+        sort: ['-birthday'],
+        page: {size: 2, number: 1}
+      })
+      equal(list04.entities[0].username, 'hoge')
+      deepEqual(list04.meta, {offset: 0, limit: 2, total: 3, length: 2})
+
+      let list05 = await driver.list('User', {
+        filter: {'__unknown_column__': 0}
+      })
+      deepEqual(list05.meta, {offset: 0, limit: 100, total: 3, length: 3})
+
+      let list06 = await driver.list('User', {
+        filter: {id: created2.id}
+      })
+      deepEqual(list06.meta, {offset: 0, limit: 100, total: 1, length: 1})
+    }
+
+    await driver.update('User', created2.id, {username: 'hogehoge'})
 
     {
-      let beforeDestroy = yield driver.one('User', created3.id)
+      let beforeDestroy = await driver.one('User', created3.id)
       ok(beforeDestroy)
     }
 
-    yield driver.destroy('User', created3.id)
+    await driver.destroy('User', created3.id)
 
     {
-      let afterDestroy = yield driver.one('User', created3.id)
+      let afterDestroy = await driver.one('User', created3.id)
       ok(!afterDestroy)
     }
 
     {
-      let byId = yield driver.list('User', { filter: { id: created3.id } })
+      let byId = await driver.list('User', {filter: {id: created3.id}})
       ok(byId)
     }
 
-    deepEqual(yield driver.resources(), [ { name: 'User', domain: null } ])
-    yield driver.drop('User')
-    deepEqual(yield driver.resources(), [])
+    deepEqual(await driver.resources(), [{name: 'User', domain: null}])
+    await driver.drop('User')
+    deepEqual(await driver.resources(), [])
 
-    yield driver.drop('__invalid_resource_name__')
+    await driver.drop('__invalid_resource_name__')
 
     {
-      let hoge = yield driver.create('Hoge', { id: 1 })
+      let hoge = await driver.create('Hoge', {id: 1})
       equal(hoge.id, '1')
-      let one = yield driver.one('Hoge', hoge.id)
+      let one = await driver.one('Hoge', hoge.id)
       equal(String(hoge.id), String(one.id))
     }
-  }))
+  })
 
 // https://github.com/realglobe-Inc/clay-driver-sqlite/issues/5
-  it('sqlite/issues/5', () => co(function * () {
+  it('sqlite/issues/5', async () => {
     const lump = clayLump('hec-eye-alpha', {
       driver: new SequelizeDriver('hogehoge', '', '', {
         storage: storage03,
@@ -168,17 +173,17 @@ describe('sequelize-driver', function () {
       })
     })
     let User = lump.resource('user')
-    yield User.drop()
-    let created = yield User.create({ name: 'hoge' })
-    let found = yield User.first({ name: 'hoge' })
-    let destroyed = yield User.destroy(found.id)
+    await User.drop()
+    let created = await User.create({name: 'hoge'})
+    let found = await User.first({name: 'hoge'})
+    let destroyed = await User.destroy(found.id)
     equal(destroyed, 1)
-    let mustBeNull = yield User.first({ name: 'hoge' })
+    let mustBeNull = await User.first({name: 'hoge'})
     ok(!mustBeNull)
-  }))
+  })
 
   // https://github.com/realglobe-Inc/clay-resource/issues/28
-  it('issues/28', () => co(function * () {
+  it('issues/28', async () => {
     const lump = clayLump('issue-28-lump', {
       driver: new SequelizeDriver('hoge', '', '', {
         storage: storage04,
@@ -189,7 +194,7 @@ describe('sequelize-driver', function () {
       })
     })
     let Person = lump.resource('Person')
-    yield Person.createBulk([ {
+    await Person.createBulk([{
       pid: 1,
       name: 'a',
       age: 2
@@ -205,22 +210,22 @@ describe('sequelize-driver', function () {
       pid: 2,
       name: 'd',
       age: 6
-    } ])
+    }])
 
     {
-      let people = yield Person.list({ filter: { pid: 1 }, sort: [ 'age' ] })
+      let people = await Person.list({filter: {pid: 1}, sort: ['age']})
       let ages = people.entities.map(p => p.age)
-      deepEqual(ages, [ 1, 2, 3 ])
+      deepEqual(ages, [1, 2, 3])
     }
 
     {
-      let people = yield Person.list({ filter: { pid: 1 }, sort: [ '-age' ] })
+      let people = await Person.list({filter: {pid: 1}, sort: ['-age']})
       let ages = people.entities.map(p => p.age)
-      deepEqual(ages, [ 3, 2, 1 ])
+      deepEqual(ages, [3, 2, 1])
     }
-  }))
+  })
 
-  it('Nested attribute and refs', () => co(function * () {
+  it('Nested attribute and refs', async () => {
     let driver = new SequelizeDriver('hoge', '', '', {
       storage: storage05,
       dialect: 'sqlite',
@@ -228,7 +233,7 @@ describe('sequelize-driver', function () {
       logging: false
     })
     let d = new Date()
-    let created = yield driver.create('Foo', {
+    let created = await driver.create('Foo', {
       bar: {
         b: false,
         n: 1,
@@ -241,36 +246,36 @@ describe('sequelize-driver', function () {
     equal(typeof created.bar.s, 'string')
     ok(created.bar.d instanceof Date)
 
-    equal((yield driver.list('Foo', { filter: { bar: { b: false } } })).meta.length, 1)
-    equal((yield driver.list('Foo', { filter: { bar: { n: 1 } } })).meta.length, 1)
-    equal((yield driver.list('Foo', { filter: { bar: { s: 'hoge' } } })).meta.length, 1)
-    equal((yield driver.list('Foo', { filter: { bar: { s: 'fuge' } } })).meta.length, 0)
-    equal((yield driver.list('Foo', { filter: { bar: { d } } })).meta.length, 1)
+    equal((await driver.list('Foo', {filter: {bar: {b: false}}})).meta.length, 1)
+    equal((await driver.list('Foo', {filter: {bar: {n: 1}}})).meta.length, 1)
+    equal((await driver.list('Foo', {filter: {bar: {s: 'hoge'}}})).meta.length, 1)
+    equal((await driver.list('Foo', {filter: {bar: {s: 'fuge'}}})).meta.length, 0)
+    equal((await driver.list('Foo', {filter: {bar: {d}}})).meta.length, 1)
 
-    yield driver.drop('Foo')
-    yield driver.create('User', {
+    await driver.drop('Foo')
+    await driver.create('User', {
       name: 'user01',
-      org: { $ref: 'Org#1' }
+      org: {$ref: 'Org#1'}
     })
-    yield driver.create('User', {
+    await driver.create('User', {
       name: 'user02',
-      org: { $ref: 'Org#2' }
+      org: {$ref: 'Org#2'}
     })
 
-    let list = yield driver.list('User', {
+    let list = await driver.list('User', {
       filter: {
-        org: { $ref: 'Org#2' }
+        org: {$ref: 'Org#2'}
       }
     })
     equal(list.meta.length, 1)
-    equal(list.entities[ 0 ].name, 'user02')
+    equal(list.entities[0].name, 'user02')
 
-    yield driver.drop('User')
+    await driver.drop('User')
 
-    yield driver.close()
-  }))
+    await driver.close()
+  })
 
-  it('Using operator', () => co(function * () {
+  it('Using operator', async () => {
     let driver = new SequelizeDriver('hoge', '', '', {
       storage: storage05,
       dialect: 'sqlite',
@@ -278,31 +283,31 @@ describe('sequelize-driver', function () {
       logging: false,
       // logging: console.log
     })
-    yield driver.create('Box', { size: 40 })
-    yield driver.create('Box', { size: 200 })
-    yield driver.create('Box', { size: 300 })
+    await driver.create('Box', {size: 40})
+    await driver.create('Box', {size: 200})
+    await driver.create('Box', {size: 300})
 
     equal(
-      (yield driver.list('Box', { filter: { size: { $gt: 200 } } })).meta.total,
+      (await driver.list('Box', {filter: {size: {$gt: 200}}})).meta.total,
       1
     )
     equal(
-      (yield driver.list('Box', { filter: { size: { $gte: 200 } } })).meta.total,
+      (await driver.list('Box', {filter: {size: {$gte: 200}}})).meta.total,
       2
     )
 
     equal(
-      (yield driver.list('Box', { filter: { size: { $in: [ 200 ] } } })).meta.total,
+      (await driver.list('Box', {filter: {size: {$in: [200]}}})).meta.total,
       1
     )
     equal(
-      (yield driver.list('Box', { filter: { size: { $between: [ 30, 210 ] } } })).meta.total,
+      (await driver.list('Box', {filter: {size: {$between: [30, 210]}}})).meta.total,
       2
     )
-  }))
+  })
 
   // https://github.com/realglobe-Inc/claydb/issues/9
-  it('claydb/issues/9', () => co(function * () {
+  it('claydb/issues/9', async () => {
     let driver = new SequelizeDriver('hoge', '', '', {
       storage: storage07,
       dialect: 'sqlite',
@@ -310,24 +315,24 @@ describe('sequelize-driver', function () {
       logging: false
     })
 
-    let user = yield driver.create('User', {
-      names: [ 'hoge', 'fuga' ],
+    let user = await driver.create('User', {
+      names: ['hoge', 'fuga'],
       nested: [
-        [ 'n-0-0', 'n-0-1' ],
-        [ 'n-0-1', [ 'n-1-1-0', 'n-1-1-1' ] ]
+        ['n-0-0', 'n-0-1'],
+        ['n-0-1', ['n-1-1-0', 'n-1-1-1']]
       ]
     })
     ok(Array.isArray(user.names))
-    deepEqual(user.names, [ 'hoge', 'fuga' ])
+    deepEqual(user.names, ['hoge', 'fuga'])
 
     deepEqual(user.nested, [
-      [ 'n-0-0', 'n-0-1' ],
-      [ 'n-0-1', [ 'n-1-1-0', 'n-1-1-1' ] ]
+      ['n-0-0', 'n-0-1'],
+      ['n-0-1', ['n-1-1-0', 'n-1-1-1']]
     ])
-  }))
+  })
 
   // https://github.com/realglobe-Inc/clay-driver-sequelize/issues/18#issuecomment-310563957
-  it('issues/18', () => co(function * () {
+  it('issues/18', async () => {
     let driver = new SequelizeDriver('hoge', '', '', {
       storage: storage08,
       dialect: 'sqlite',
@@ -335,26 +340,26 @@ describe('sequelize-driver', function () {
       logging: false
     })
 
-    yield driver.drop('User')
-    yield driver.create('User', { d: new Date('2017/06/22') })
-    yield driver.create('User', { d: new Date('2017/07/22') })
-    yield driver.create('User', { d: new Date('2017/08/22') })
+    await driver.drop('User')
+    await driver.create('User', {d: new Date('2017/06/22')})
+    await driver.create('User', {d: new Date('2017/07/22')})
+    await driver.create('User', {d: new Date('2017/08/22')})
 
     equal(
-      (yield driver.list('User', { filter: { d: { $gt: new Date('2017/07/23') } } })).meta.length,
+      (await driver.list('User', {filter: {d: {$gt: new Date('2017/07/23')}}})).meta.length,
       1
     )
     equal(
-      (yield driver.list('User', { filter: { d: { $gt: new Date('2017/06/23') } } })).meta.length,
+      (await driver.list('User', {filter: {d: {$gt: new Date('2017/06/23')}}})).meta.length,
       2
     )
     equal(
-      (yield driver.list('User', { filter: { d: { $between: [ new Date('2017/07/21'), new Date('2017/07/23') ] } } })).meta.length,
+      (await driver.list('User', {filter: {d: {$between: [new Date('2017/07/21'), new Date('2017/07/23')]}}})).meta.length,
       1
     )
-  }))
+  })
 
-  it('A lot of CRUD on sqlite', () => co(function * () {
+  it('A lot of CRUD on sqlite', async () => {
     const log = fs.createWriteStream(`${__dirname}/../tmp/a-lot-of-CRUD.log`)
     const driver = new SequelizeDriver('hoge', '', '', {
       storage: storage09,
@@ -362,7 +367,7 @@ describe('sequelize-driver', function () {
       benchmark: true,
       logging: (line) => log.write(line + EOL)
     })
-    yield driver.drop('Box')
+    await driver.drop('Box')
 
     const NUMBER_OF_ENTITY = 50
     const NUMBER_OF_ATTRIBUTE = 10
@@ -377,11 +382,11 @@ describe('sequelize-driver', function () {
           .fill(null)
           .reduce((attr, _, j) => Object.assign(attr, {
             [`attr-${j}`]: j
-          }), { index: i })
+          }), {index: i})
         creatingQueue.push(driver.create('Box', attributes))
       }
       ids.push(
-        ...(yield Promise.all(creatingQueue)).map(({ id }) => id)
+        ...(await Promise.all(creatingQueue)).map(({id}) => id)
       )
       console.log(`Took ${new Date() - startAt}ms for ${NUMBER_OF_ENTITY} entities, ${NUMBER_OF_ATTRIBUTE} attributes to create`)
     }
@@ -399,40 +404,38 @@ describe('sequelize-driver', function () {
           driver.update('Box', id, attributes)
         )
       }
-      yield Promise.all(updateQueue)
+      await Promise.all(updateQueue)
       console.log(`Took ${new Date() - startAt}ms for ${NUMBER_OF_ENTITY} entities, ${NUMBER_OF_ATTRIBUTE} attributes to update`)
     }
 
-    yield driver.close()
+    await driver.close()
 
     log.end()
-  }))
+  })
 
   it('A lot of CRUD on mysql', async () => {
-    function resetMysqlDatabase (rootUsername, rootPassword, config = {}) {
+    async function resetMysqlDatabase (rootUsername, rootPassword, config = {}) {
       const escape = (value) => `${'\\`'}${value}${'\\`'}`
-      return co(function * () {
-        let { username, password, database, host = 'localhost' } = config
-        rootUsername = rootUsername || config.rootUsername || 'root'
-        rootPassword = rootPassword || config.rootPassword
-        let sql = `DROP DATABASE IF EXISTS ${database}; CREATE DATABASE IF NOT EXISTS ${database}; GRANT ALL ON ${escape(database)}.* TO '${username}'@'%' IDENTIFIED BY '${password}'`
-        let command = `mysql -u${rootUsername} --host=${host} ${host === 'localhost' ? '' : '--protocol=tcp '}-e"${sql}"`
-        let env = Object.assign({}, process.env)
-        if (rootPassword) {
-          env.MYSQL_PWD = rootPassword
-        }
-        let { stdout, stderr } = yield new Promise((resolve, reject) =>
-          exec(command, { env }, (err, stdout, stderr) =>
-            err ? reject(err) : resolve({ stdout, stderr })
-          )
+      let {username, password, database, host = 'localhost'} = config
+      rootUsername = rootUsername || config.rootUsername || 'root'
+      rootPassword = rootPassword || config.rootPassword
+      let sql = `DROP DATABASE IF EXISTS ${database}; CREATE DATABASE IF NOT EXISTS ${database}; GRANT ALL ON ${escape(database)}.* TO '${username}'@'%' IDENTIFIED BY '${password}'`
+      let command = `mysql -u${rootUsername} --host=${host} ${host === 'localhost' ? '' : '--protocol=tcp '}-e"${sql}"`
+      let env = Object.assign({}, process.env)
+      if (rootPassword) {
+        env.MYSQL_PWD = rootPassword
+      }
+      let {stdout, stderr} = await new Promise((resolve, reject) =>
+        exec(command, {env}, (err, stdout, stderr) =>
+          err ? reject(err) : resolve({stdout, stderr})
         )
-        if (stdout) {
-          console.log(stdout)
-        }
-        if (stderr) {
-          console.error(stderr)
-        }
-      })
+      )
+      if (stdout) {
+        console.log(stdout)
+      }
+      if (stderr) {
+        console.error(stderr)
+      }
     }
 
     const DB_ROOT_USER = 'root'
@@ -470,11 +473,11 @@ describe('sequelize-driver', function () {
             .fill(null)
             .reduce((attr, _, j) => Object.assign(attr, {
               [`attr-${j}`]: j
-            }), { index: i })
+            }), {index: i})
           creatingQueue.push(driver.create('Box', attributes))
         }
         ids.push(
-          ...(await Promise.all(creatingQueue)).map(({ id }) => id)
+          ...(await Promise.all(creatingQueue)).map(({id}) => id)
         )
         console.log(`Took ${new Date() - startAt}ms for ${NUMBER_OF_ENTITY} entities, ${NUMBER_OF_ATTRIBUTE} attributes to create`)
       }
@@ -506,7 +509,7 @@ describe('sequelize-driver', function () {
         })
         equal(created.payload.length, 1000)
 
-        for (const l of [ 0, 10, 2000 ]) {
+        for (const l of [0, 10, 2000]) {
           await driver.update('Big', created.id, {
             payload: new Array(l).fill('b').join('')
           })
@@ -519,7 +522,7 @@ describe('sequelize-driver', function () {
     await driver.close()
   })
 
-  it('skip duplicate update', () => co(function * () {
+  it('skip duplicate update', async () => {
     let driver = new SequelizeDriver('hoge', '', '', {
       storage: storage10,
       dialect: 'sqlite',
@@ -527,12 +530,12 @@ describe('sequelize-driver', function () {
       logging: false
     })
 
-    let entity = yield driver.create('Color', { name: 'red', code: '#E11' })
+    let entity = await driver.create('Color', {name: 'red', code: '#E11'})
     equal(entity.code, '#E11')
-    yield driver.update('Color', entity.id, { code: '#F11', name: 'red' })
-    entity = yield driver.one('Color', entity.id)
+    await driver.update('Color', entity.id, {code: '#F11', name: 'red'})
+    entity = await driver.one('Color', entity.id)
     equal(entity.code, '#F11')
-  }))
+  })
 
   it('Store large data', async () => {
     let driver = new SequelizeDriver('foo', '', '', {
@@ -548,7 +551,7 @@ describe('sequelize-driver', function () {
     })
     equal(created.payload.length, 1000)
 
-    for (const l of [ 0, 10, 2000, 3 ]) {
+    for (const l of [0, 10, 2000, 3]) {
       {
         await driver.update('Big', created.id, {
           payload: new Array(l).fill('b').join('')
