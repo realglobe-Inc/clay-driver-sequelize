@@ -12,6 +12,7 @@ const {ok, equal, deepEqual, strictEqual} = require('assert')
 const path = require('path')
 const {exec} = require('child_process')
 const fs = require('fs')
+const asleep = require('asleep')
 const mkdirp = require('mkdirp')
 const rimraf = require('rimraf')
 
@@ -70,11 +71,13 @@ describe('sequelize-driver', function () {
     const one = await driver.one('User', created.id)
     equal(String(one.id), String(created.id))
 
+    await asleep(10)
     const created2 = await driver.create('User', {
       username: 'hoge',
       birthday: new Date('1990/08/26')
     })
 
+    await asleep(10)
     const created3 = await driver.create('User', {
       username: 'foge',
       birthday: new Date('1983/08/26')
@@ -89,6 +92,13 @@ describe('sequelize-driver', function () {
       const {entities} = await driver.list('User', {filter: {$$num: created3.$$num}})
       equal(entities.length, 1)
       equal(String(entities[0].id), String(created3.id))
+    }
+
+    {
+      const {entities} = await driver.list('User', {sort: ['-$$at']})
+      equal(entities.length, 3)
+      equal(String(entities[0].id), String(created3.id))
+      equal(String(entities[1].id), String(created2.id))
     }
 
     {
