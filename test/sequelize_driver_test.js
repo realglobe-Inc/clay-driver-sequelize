@@ -236,7 +236,7 @@ describe('sequelize-driver', function () {
   })
 
   it('Nested attribute and refs', async () => {
-    let driver = new SequelizeDriver('hoge', '', '', {
+    const driver = new SequelizeDriver('hoge', '', '', {
       storage: storage05,
       dialect: 'sqlite',
       benchmark: true,
@@ -286,7 +286,7 @@ describe('sequelize-driver', function () {
   })
 
   it('Using operator', async () => {
-    let driver = new SequelizeDriver('hoge', '', '', {
+    const driver = new SequelizeDriver('hoge', '', '', {
       storage: storage05,
       dialect: 'sqlite',
       benchmark: true,
@@ -318,7 +318,7 @@ describe('sequelize-driver', function () {
 
   // https://github.com/realglobe-Inc/claydb/issues/9
   it('claydb/issues/9', async () => {
-    let driver = new SequelizeDriver('hoge', '', '', {
+    const driver = new SequelizeDriver('hoge', '', '', {
       storage: storage07,
       dialect: 'sqlite',
       benchmark: true,
@@ -343,7 +343,7 @@ describe('sequelize-driver', function () {
 
   // https://github.com/realglobe-Inc/clay-driver-sequelize/issues/18#issuecomment-310563957
   it('issues/18', async () => {
-    let driver = new SequelizeDriver('hoge', '', '', {
+    const driver = new SequelizeDriver('hoge', '', '', {
       storage: storage08,
       dialect: 'sqlite',
       benchmark: true,
@@ -459,7 +459,7 @@ describe('sequelize-driver', function () {
       password: DB_PASSWORD
     })
 
-    let driver = new SequelizeDriver(DATABASE, DB_ROOT_USER, DB_ROOT_PASSWORD, {
+    const driver = new SequelizeDriver(DATABASE, DB_ROOT_USER, DB_ROOT_PASSWORD, {
       dialect: 'mysql',
       benchmark: true,
       // logging: console.log
@@ -533,7 +533,7 @@ describe('sequelize-driver', function () {
   })
 
   it('skip duplicate update', async () => {
-    let driver = new SequelizeDriver('hoge', '', '', {
+    const driver = new SequelizeDriver('hoge', '', '', {
       storage: storage10,
       dialect: 'sqlite',
       benchmark: true,
@@ -548,7 +548,7 @@ describe('sequelize-driver', function () {
   })
 
   it('Store large data', async () => {
-    let driver = new SequelizeDriver('foo', '', '', {
+    const driver = new SequelizeDriver('foo', '', '', {
       storage: storage11,
       dialect: 'sqlite',
       benchmark: true,
@@ -572,6 +572,36 @@ describe('sequelize-driver', function () {
         ok(/^aaaa/.test(one.payload))
       }
     }
+  })
+
+  it('Handling object', async () => {
+    const driver = new SequelizeDriver('foo', '', '', {
+      storage: storage11,
+      dialect: 'sqlite',
+      benchmark: true,
+      logging: false
+    })
+
+    const created = await driver.create('Big', {
+      name: 'd1',
+      values: {
+        s1: 'string01',
+        s2: 'string02',
+        o1: {'k1': 'This is key01', 'k2': 'This is key02'},
+        d1: new Date(),
+        n1: 1,
+        b1: true
+      }
+    })
+    equal(created.values.o1.k1, 'This is key01')
+    strictEqual(created.values.b1, true)
+
+    const updated = await driver.update('Big', created.id, {
+      values: {n2: 2, b1: null, o1: {k3: 'This is key03'}}
+    })
+
+    deepEqual(updated.values.o1, {k3: 'This is key03'})
+    console.log('updated', updated)
   })
 })
 
