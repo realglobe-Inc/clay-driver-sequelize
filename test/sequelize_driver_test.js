@@ -561,14 +561,18 @@ describe('sequelize-driver', function () {
     })
     equal(created.payload.length, 1000)
 
-    for (const l of [0, 10, 2000, 3]) {
+    for (const l of [0, 10, 2000, 3, 500]) {
       const prefix = 'aaaa'
+      const payload = prefix + new Array(l).fill('b').join('')
       await driver.update('Big', created.id, {
-        payload: prefix + new Array(l).fill('b').join('')
+        payload
       })
       const one = await driver.one('Big', created.id)
       equal(one.payload.length, l + prefix.length)
       ok(/^aaaa/.test(one.payload))
+
+      const list = await driver.list('Big', {filter: {payload}})
+      equal(list.meta.total, 1)
     }
     await driver.destroy('Big', created.id)
   })
