@@ -29,6 +29,7 @@ describe('sequelize-driver', function () {
   let storage09 = `${__dirname}/../tmp/testing-driver-9.db`
   let storage10 = `${__dirname}/../tmp/testing-driver-10.db`
   let storage11 = `${__dirname}/../tmp/testing-driver-11.db`
+  let storage12 = `${__dirname}/../tmp/testing-driver-12.db`
 
   before(async () => {
     let storages = [
@@ -43,6 +44,7 @@ describe('sequelize-driver', function () {
       storage09,
       storage10,
       storage11,
+      storage12,
     ]
     for (let storage of storages) {
       rimraf.sync(storage)
@@ -605,6 +607,24 @@ describe('sequelize-driver', function () {
 
     deepEqual(updated.values.o1, {k3: 'This is key03'})
     console.log('updated', updated)
+  })
+
+  // https://github.com/realglobe-Inc/hec-eye/issues/216
+  it('Multiple extra', async () => {
+    const driver = new SequelizeDriver('foo', '', '', {
+      storage: storage12,
+      dialect: 'sqlite',
+      benchmark: true,
+      logging: false
+    })
+
+    await driver.create('Poster', {
+      attr01: new Array(200).fill('a').join('_'),
+      attr02: new Array(200).fill('b').join('_')
+    })
+
+    const {meta} = await driver.list('Poster')
+    deepEqual({offset: 0, limit: 100, total: 1, length: 1}, meta)
   })
 })
 
