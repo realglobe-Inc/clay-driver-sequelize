@@ -597,7 +597,8 @@ describe('sequelize-driver', function () {
         n1: 1,
         b1: true,
         a1: new Array(500).fill(null).map((_, i) => i)
-      }
+      },
+      a2: new Array(800).fill(null).map((_, i) => i)
     })
     equal(created.values.o1.k1, 'This is key01')
     strictEqual(created.values.b1, true)
@@ -607,7 +608,7 @@ describe('sequelize-driver', function () {
     })
 
     deepEqual(updated.values.o1, {k3: 'This is key03'})
-    console.log('updated', updated)
+    equal(updated.values.a1.length, 500)
   })
 
   // https://github.com/realglobe-Inc/hec-eye/issues/216
@@ -621,11 +622,15 @@ describe('sequelize-driver', function () {
 
     await driver.create('Poster', {
       attr01: new Array(200).fill('a').join('_'),
-      attr02: new Array(200).fill('b').join('_')
+      attr02: new Array(200).fill('b').join('_'),
+      attr03: {
+        c: new Array(200).fill('c').join('_'),
+      }
     })
 
-    const {meta} = await driver.list('Poster')
+    const {entities, meta} = await driver.list('Poster')
     deepEqual({offset: 0, limit: 100, total: 1, length: 1}, meta)
+    equal(entities[0].attr03.c.length, 399)
   })
 })
 
