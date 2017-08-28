@@ -598,7 +598,6 @@ describe('sequelize-driver', function () {
         b1: true,
         a1: new Array(500).fill(null).map((_, i) => i)
       },
-      a2: new Array(800).fill(null).map((_, i) => i)
     })
     equal(created.values.o1.k1, 'This is key01')
     strictEqual(created.values.b1, true)
@@ -620,17 +619,23 @@ describe('sequelize-driver', function () {
       logging: false
     })
 
-    await driver.create('Poster', {
+    const poster01 = await driver.create('Poster', {
       attr01: new Array(200).fill('a').join('_'),
       attr02: new Array(200).fill('b').join('_'),
       attr03: {
-        c: new Array(200).fill('c').join('_'),
+        c: new Array(10).fill(null).map((_, i) => ({i})),
       }
     })
 
     const {entities, meta} = await driver.list('Poster')
     deepEqual({offset: 0, limit: 100, total: 1, length: 1}, meta)
-    equal(entities[0].attr03.c.length, 399)
+
+    const updated = await driver.update('Poster', poster01.id, {
+      attr03: {
+        c: new Array(200).fill(null).map((_, i) => ({i})),
+      }
+    })
+    equal(updated.attr03.c.length, 200)
   })
 })
 
