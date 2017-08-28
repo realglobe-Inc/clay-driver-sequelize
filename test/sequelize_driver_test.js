@@ -579,7 +579,7 @@ describe('sequelize-driver', function () {
     await driver.destroy('Big', created.id)
   })
 
-  it('Handling object', async () => {
+  it('Handling object and array', async () => {
     const driver = new SequelizeDriver('foo', '', '', {
       storage: storage11,
       dialect: 'sqlite',
@@ -595,7 +595,8 @@ describe('sequelize-driver', function () {
         o1: {'k1': 'This is key01', 'k2': 'This is key02'},
         d1: new Date(),
         n1: 1,
-        b1: true
+        b1: true,
+        a1: new Array(500).fill(null).map((_, i) => i)
       }
     })
     equal(created.values.o1.k1, 'This is key01')
