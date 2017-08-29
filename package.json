@@ -25,7 +25,7 @@
   "dependencies": {
     "asenv": "^1.1.1",
     "asleep": "^1.0.3",
-    "asobj": "^1.5.0",
+    "asobj": "*",
     "clay-collection": "^3.1.2",
     "clay-constants": "^3.1.1",
     "clay-driver-base": "^3.1.3",
@@ -33,6 +33,7 @@
     "clay-id": "^3.0.1",
     "clay-list-pager": "^2.0.2",
     "clay-resource-name": "^4.0.2",
+    "clay-resource-ref": "^2.0.2",
     "clay-serial": "^2.0.3",
     "continuation-local-storage": "^3.2.0",
     "lru-cache": "^4.1.1",
@@ -60,7 +61,7 @@
     "request": "^2.81.0",
     "rimraf": "^2.6.1",
     "sg-templates": "^1.4.4",
-    "sqlite3": "*",
+    "sqlite3": "^3.1.9",
     "sugos-travis": "^2.0.7",
     "the-script-jsdoc": "^1.0.8",
     "writeout": "^2.2.0"

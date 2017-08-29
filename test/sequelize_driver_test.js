@@ -31,6 +31,7 @@ describe('sequelize-driver', function () {
   let storage11 = `${__dirname}/../tmp/testing-driver-11.db`
   let storage12 = `${__dirname}/../tmp/testing-driver-12.db`
   let storage13 = `${__dirname}/../tmp/testing-driver-13.db`
+  let storage14 = `${__dirname}/../tmp/testing-driver-14.db`
 
   before(async () => {
     let storages = [
@@ -47,6 +48,7 @@ describe('sequelize-driver', function () {
       storage11,
       storage12,
       storage13,
+      storage14,
     ]
     for (let storage of storages) {
       rimraf.sync(storage)
@@ -247,24 +249,21 @@ describe('sequelize-driver', function () {
       logging: false
     })
     let d = new Date()
+    await driver.drop('Foo')
     let created = await driver.create('Foo', {
       bar: {
         b: false,
         n: 1,
         s: 'hoge',
-        d
-      }
+      },
+      d
     })
     equal(typeof created.bar.b, 'boolean')
     equal(typeof created.bar.n, 'number')
     equal(typeof created.bar.s, 'string')
-    ok(created.bar.d instanceof Date)
+    ok(created.d instanceof Date)
 
-    equal((await driver.list('Foo', {filter: {bar: {b: false}}})).meta.length, 1)
-    equal((await driver.list('Foo', {filter: {bar: {n: 1}}})).meta.length, 1)
-    equal((await driver.list('Foo', {filter: {bar: {s: 'hoge'}}})).meta.length, 1)
-    equal((await driver.list('Foo', {filter: {bar: {s: 'fuge'}}})).meta.length, 0)
-    equal((await driver.list('Foo', {filter: {bar: {d}}})).meta.length, 1)
+    equal((await driver.list('Foo', {filter: {d}})).meta.length, 1)
 
     await driver.drop('Foo')
     await driver.create('User', {
@@ -603,13 +602,13 @@ describe('sequelize-driver', function () {
     })
     equal(created.values.o1.k1, 'This is key01')
     strictEqual(created.values.b1, true)
+    equal(created.values.a1.length, 500)
 
     const updated = await driver.update('Big', created.id, {
       values: {n2: 2, b1: null, o1: {k3: 'This is key03'}}
     })
 
     deepEqual(updated.values.o1, {k3: 'This is key03'})
-    equal(updated.values.a1.length, 500)
   })
 
   // https://github.com/realglobe-Inc/hec-eye/issues/216
@@ -640,6 +639,27 @@ describe('sequelize-driver', function () {
     equal(updated.attr03.c.length, 200)
   })
 
+  // https://github.com/realglobe-Inc/claydb/issues/13
+  it('Update many times', async () => {
+    const driver = new SequelizeDriver('hoge', '', '', {
+      storage: storage13,
+      dialect: 'sqlite',
+      benchmark: true,
+      logging: false
+    })
+    const entity = await driver.create('A', {number: -1})
+
+    for (let i = 0; i < 10; i++) {
+      (async () => {
+        const number = i
+        console.log('Update number', number)
+        const updated = await driver.update('A', entity.id, {number})
+        equal(number, updated.number)
+      })()
+    }
+
+  })
+
   // https://github.com/realglobe-Inc/claydb/issues/12
   it('Handle array', async () => {
     const driver = new SequelizeDriver('hoge', '', '', {
@@ -650,8 +670,11 @@ describe('sequelize-driver', function () {
     })
     const user01 = await driver.create('User', {strings: ['a', 'b']})
     const user02 = await driver.create('User', {})
+    const user01Updated = await driver.update('User', user01.id, {strings: ['c']})
 
-    console.log('user02.strings', user02.strings,user02)
+    deepEqual(user01.strings, ['a', 'b'])
+    deepEqual(user02.strings, null)
+    deepEqual(user01Updated.strings, ['c'])
   })
 })
 
