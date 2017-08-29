@@ -469,7 +469,7 @@ describe('sequelize-driver', function () {
     })
     await driver.drop('Box')
 
-    const NUMBER_OF_ENTITY = 100
+    const NUMBER_OF_ENTITY = 50
     const NUMBER_OF_ATTRIBUTE = 20
 
     for (let n = 0; n < 2; n++) {
@@ -495,21 +495,26 @@ describe('sequelize-driver', function () {
       }
       // Update
       {
-        for (let i = 0; i < 2; i++) {
+        const times = 10
+        for (let i = 0; i < times; i++) {
           const updateQueue = []
           const startAt = new Date()
-          for (let id of ids) {
-            let attributes = new Array(NUMBER_OF_ATTRIBUTE - 1)
+          for (const id of ids) {
+            const attributes = new Array(NUMBER_OF_ATTRIBUTE - 1)
               .fill(null)
               .reduce((attr, _, j) => Object.assign(attr, {
-                [`attr-${j}`]: `${j}-updated-${i}`
+                [`attr-${j}`]: {
+                  foo: {
+                    bar: new Array(500).fill(null).map((_, i) => new Date().getTime() * Math.random())
+                  }
+                }
               }), {})
             updateQueue.push(
               driver.update('Box', id, attributes)
             )
           }
           await Promise.all(updateQueue)
-          console.log(`Took ${new Date() - startAt}ms for ${NUMBER_OF_ENTITY} entities, ${NUMBER_OF_ATTRIBUTE} attributes to update`)
+          console.log(`Took ${new Date() - startAt}ms for ${NUMBER_OF_ENTITY} entities, ${NUMBER_OF_ATTRIBUTE} attributes to update ${times} times`)
         }
       }
 
