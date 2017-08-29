@@ -30,6 +30,7 @@ describe('sequelize-driver', function () {
   let storage10 = `${__dirname}/../tmp/testing-driver-10.db`
   let storage11 = `${__dirname}/../tmp/testing-driver-11.db`
   let storage12 = `${__dirname}/../tmp/testing-driver-12.db`
+  let storage13 = `${__dirname}/../tmp/testing-driver-13.db`
 
   before(async () => {
     let storages = [
@@ -45,6 +46,7 @@ describe('sequelize-driver', function () {
       storage10,
       storage11,
       storage12,
+      storage13,
     ]
     for (let storage of storages) {
       rimraf.sync(storage)
@@ -636,6 +638,20 @@ describe('sequelize-driver', function () {
       }
     })
     equal(updated.attr03.c.length, 200)
+  })
+
+  // https://github.com/realglobe-Inc/claydb/issues/12
+  it('Handle array', async () => {
+    const driver = new SequelizeDriver('hoge', '', '', {
+      storage: storage12,
+      dialect: 'sqlite',
+      benchmark: true,
+      logging: false
+    })
+    const user01 = await driver.create('User', {strings: ['a', 'b']})
+    const user02 = await driver.create('User', {})
+
+    console.log('user02.strings', user02.strings,user02)
   })
 })
 
