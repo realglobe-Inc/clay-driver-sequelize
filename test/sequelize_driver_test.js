@@ -266,24 +266,43 @@ describe('sequelize-driver', function () {
     equal((await driver.list('Foo', {filter: {d}})).meta.length, 1)
 
     await driver.drop('Foo')
-    await driver.create('User', {
-      name: 'user01',
-      org: {$ref: 'Org#1'}
-    })
-    await driver.create('User', {
-      name: 'user02',
-      org: {$ref: 'Org#2'}
-    })
-
-    let list = await driver.list('User', {
-      filter: {
+    {
+      await driver.create('User', {
+        name: 'user01',
+        org: {$ref: 'Org#1'}
+      })
+      await driver.create('User', {
+        name: 'user02',
         org: {$ref: 'Org#2'}
-      }
-    })
-    equal(list.meta.length, 1)
-    equal(list.entities[0].name, 'user02')
+      })
 
-    await driver.drop('User')
+      let list = await driver.list('User', {
+        filter: {
+          org: {$ref: 'Org#2'}
+        }
+      })
+      equal(list.meta.length, 1)
+      equal(list.entities[0].name, 'user02')
+
+      await driver.drop('User')
+    }
+
+    {
+      const org01 = await driver.create('Org', {name: 'org01'})
+      const org02 = await driver.create('Org', {name: 'org02'})
+      const user01 = await driver.create('User', {name: 'user01', org: org01})
+      const user02 = await driver.create('User', {name: 'user02', org: org02})
+      const user03 = await driver.create('User', {name: 'user03', org: org02})
+
+      const org01Users = await driver.list('User', {filter: {org: org01}})
+      equal(org01Users.entities.length, 1)
+      equal(org01Users.entities[0].name, 'user01')
+
+      const org02Users = await driver.list('User', {filter: {org: org02}})
+      equal(org02Users.entities.length, 2)
+      equal(org02Users.entities[1].name, 'user03')
+      equal(org02Users.entities[1].org.$ref, `Org#${org02.id}`)
+    }
 
     await driver.close()
   })
@@ -649,14 +668,16 @@ describe('sequelize-driver', function () {
     })
     const entity = await driver.create('A', {number: -1})
 
-    for (let i = 0; i < 10; i++) {
-      (async () => {
-        const number = i
-        console.log('Update number', number)
-        const updated = await driver.update('A', entity.id, {number})
-        equal(number, updated.number)
-      })()
-    }
+    await Promise.all(
+      new Array(10).fill(null).map((_, i) =>
+        (async () => {
+          const number = i
+          console.log('Update number', number)
+          const updated = await driver.update('A', entity.id, {number})
+          console.log('Updated', updated.number)
+        })()
+      )
+    )
 
   })
 
