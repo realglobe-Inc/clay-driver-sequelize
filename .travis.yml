@@ -1,17 +1,15 @@
 language: node_js
-compiler: g++
+compiler: gcc
+dist: trusty
+
 node_js:
 - '8'
-before_install:
-- sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-- sudo apt-get update -qq
 
-install:
-- sudo apt-get install -qq g++-4.8
-- export CXX="g++-4.8"
+before_install:
 - npm i npm-cli-login -g
 - npm-cli-login -u "${NPM_USER}" -p "${NPM_PASSWORD}" -e "${NPM_EMAIL}"
 - npm who
+
 install:
 - npm install jsdoc -g
 - npm install
