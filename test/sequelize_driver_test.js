@@ -413,7 +413,7 @@ describe('sequelize-driver', function () {
         const attributes = new Array(NUMBER_OF_ATTRIBUTE - 1)
           .fill(null)
           .reduce((attr, _, j) => Object.assign(attr, {
-            [`attr-${j}`]: j
+            [`attr-${j}`]: `${j}-created`
           }), {index: i})
         creatingQueue.push(driver.create('Box', attributes))
       }
@@ -430,7 +430,7 @@ describe('sequelize-driver', function () {
         let attributes = new Array(NUMBER_OF_ATTRIBUTE - 1)
           .fill(null)
           .reduce((attr, _, j) => Object.assign(attr, {
-            [`attr-${j}`]: `${j}-updated`
+            [`attr-${j}`]: {name: `${j}-updated`}
           }), {})
         updateQueue.push(
           driver.update('Box', id, attributes)
