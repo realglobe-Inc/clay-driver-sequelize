@@ -1,4 +1,4 @@
-# clay-driver-sequelize@6.0.5
+# clay-driver-sequelize@6.0.6
 
 Clay driver for Sequelize
 
