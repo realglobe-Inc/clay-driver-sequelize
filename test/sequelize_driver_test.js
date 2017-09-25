@@ -32,6 +32,7 @@ describe('sequelize-driver', function () {
   let storage12 = `${__dirname}/../tmp/testing-driver-12.db`
   let storage13 = `${__dirname}/../tmp/testing-driver-13.db`
   let storage14 = `${__dirname}/../tmp/testing-driver-14.db`
+  let storage15 = `${__dirname}/../tmp/testing-driver-15.db`
 
   before(async () => {
     let storages = [
@@ -49,6 +50,7 @@ describe('sequelize-driver', function () {
       storage12,
       storage13,
       storage14,
+      storage15,
     ]
     for (let storage of storages) {
       rimraf.sync(storage)
@@ -696,6 +698,35 @@ describe('sequelize-driver', function () {
     deepEqual(user01.strings, ['a', 'b'])
     deepEqual(user02.strings, null)
     deepEqual(user01Updated.strings, ['c'])
+  })
+
+  // https://github.com/realglobe-Inc/claydb/issues/18
+  it('Update conflict', async () => {
+    const driver = new SequelizeDriver('hoge', '', '', {
+      storage: storage15,
+      dialect: 'sqlite',
+      benchmark: true,
+      logging: false
+    })
+
+    let a = await driver.create('A', {
+      name: 'foo'
+    })
+
+
+    const largeObj = {value: (new Array(26)).fill('0123456789')}
+    driver.update('A', a.id, {
+      obj: largeObj
+    })
+
+    await asleep(500)
+
+    const updated = driver.update('A', a.id, {
+      name: 'bar'
+    })
+
+    await asleep(500)
+
   })
 })
 
