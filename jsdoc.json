@@ -63,16 +63,7 @@
             "access": "",
             "virtual": false,
             "description": "Define entity model",
-            "parameters": [
-                {
-                    "name": "define",
-                    "type": "function",
-                    "description": "Definer",
-                    "default": "",
-                    "optional": "",
-                    "nullable": ""
-                }
-            ],
+            "parameters": [],
             "examples": [],
             "returns": {
                 "type": "Object",
@@ -94,6 +85,18 @@
                     "nullable": ""
                 }
             ],
+            "examples": [],
+            "returns": {
+                "type": "Object",
+                "description": "Defined model"
+            }
+        },
+        {
+            "name": "usageModel",
+            "access": "",
+            "virtual": false,
+            "description": "Define usage model",
+            "parameters": [],
             "examples": [],
             "returns": {
                 "type": "Object",
