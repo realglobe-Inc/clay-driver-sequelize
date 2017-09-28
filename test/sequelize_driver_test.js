@@ -403,12 +403,12 @@ describe('sequelize-driver', function () {
 
     const NUMBER_OF_ENTITY = 50
     const NUMBER_OF_ATTRIBUTE = 10
-    let ids = []
+    const ids = []
 
     // Create
     {
-      let startAt = new Date()
-      let creatingQueue = []
+      const startAt = new Date()
+      const creatingQueue = []
       for (let i = 0; i < NUMBER_OF_ENTITY; i++) {
         const attributes = new Array(NUMBER_OF_ATTRIBUTE - 1)
           .fill(null)
