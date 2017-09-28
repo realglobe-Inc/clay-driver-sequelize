@@ -34,7 +34,7 @@ describe('sequelize-driver', function () {
   let storage14 = `${__dirname}/../tmp/testing-driver-14.db`
 
   before(async () => {
-    let storages = [
+    const storages = [
       storage01,
       storage02,
       storage03,
@@ -475,6 +475,7 @@ describe('sequelize-driver', function () {
     const DB_USER = 'hoge'
     const DB_PASSWORD = 'fuge'
     const DATABASE = 'clay_driver_sequelize_test'
+
     await resetMysqlDatabase(DB_ROOT_USER, DB_ROOT_PASSWORD, {
       database: DATABASE,
       username: DB_USER,
@@ -518,8 +519,8 @@ describe('sequelize-driver', function () {
         for (let i = 0; i < 2; i++) {
           const updateQueue = []
           const startAt = new Date()
-          for (let id of ids) {
-            let attributes = new Array(NUMBER_OF_ATTRIBUTE - 1)
+          for (const id of ids) {
+            const attributes = new Array(NUMBER_OF_ATTRIBUTE - 1)
               .fill(null)
               .reduce((attr, _, j) => Object.assign(attr, {
                 [`attr-${j}`]: `${j}-updated-${i}`
@@ -532,6 +533,8 @@ describe('sequelize-driver', function () {
           console.log(`Took ${new Date() - startAt}ms for ${NUMBER_OF_ENTITY} entities, ${NUMBER_OF_ATTRIBUTE} attributes to update`)
         }
       }
+
+      await driver.list('Box', {sort: [`attr-1`]})
 
       // large data
       {
@@ -552,6 +555,18 @@ describe('sequelize-driver', function () {
       }
     }
     await driver.close()
+
+    // Apply usage
+    {
+      const driver = new SequelizeDriver(DATABASE, DB_ROOT_USER, DB_ROOT_PASSWORD, {
+        dialect: 'mysql',
+        benchmark: true,
+        logging: console.log
+        // logging: false
+      })
+      await driver.list('Box', {filter: {[`attr-1`]: 'attr-1-1'}})
+      await driver.list('Box', {sort: [`attr-1`]})
+    }
   })
 
   it('skip duplicate update', async () => {
