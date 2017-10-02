@@ -151,6 +151,7 @@ describe('sequelize-driver', function () {
     {
       let beforeDestroy = await driver.one('User', created3.id)
       ok(beforeDestroy)
+      ok(beforeDestroy.$$num)
     }
 
     await driver.destroy('User', created3.id)
