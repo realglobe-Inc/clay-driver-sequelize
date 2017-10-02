@@ -398,7 +398,8 @@ describe('sequelize-driver', function () {
       storage: storage09,
       dialect: 'sqlite',
       benchmark: true,
-      logging: (line) => log.write(line + EOL)
+      // logging: (line) => log.write(line + EOL),
+      logging: false
     })
     await driver.drop('Box')
 
@@ -443,6 +444,7 @@ describe('sequelize-driver', function () {
     asleep(100)
     await driver.close()
 
+    asleep(100)
     log.end()
   })
 
