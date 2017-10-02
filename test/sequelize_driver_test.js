@@ -440,7 +440,7 @@ describe('sequelize-driver', function () {
       await Promise.all(updateQueue)
       console.log(`Took ${new Date() - startAt}ms for ${NUMBER_OF_ENTITY} entities, ${NUMBER_OF_ATTRIBUTE} attributes to update`)
     }
-
+    asleep(100)
     await driver.close()
 
     log.end()
