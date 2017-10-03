@@ -98,7 +98,7 @@ const { SequelizeDriver } = require('clay-driver-sequelize')
 API
 ---------
 
-# clay-driver-sequelize@6.3.0
+# clay-driver-sequelize@6.3.1
 
 Clay driver for Sequelize
 
