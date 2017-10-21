@@ -67,6 +67,11 @@ describe('sequelize-driver', function () {
       benchmark: true,
       logging: console.log
     })
+
+    ok(driver.config)
+
+    equal(driver.config.database, 'hoge')
+
     const created = await driver.create('User', {
       username: 'okunishinishi',
       birthday: new Date('1985/08/26')
