@@ -152,7 +152,23 @@
                     }
                 ],
                 "examples": []
-            }
+            },
+            "properties": [
+                {
+                    "name": "config",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Data base configuration",
+                    "type": ""
+                },
+                {
+                    "name": "config",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Data base configuration",
+                    "type": ""
+                }
+            ]
         },
         {
             "name": "SequelizeDriver",
@@ -201,7 +217,23 @@
                     }
                 ],
                 "examples": []
-            }
+            },
+            "properties": [
+                {
+                    "name": "config",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Data base configuration",
+                    "type": ""
+                },
+                {
+                    "name": "config",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Data base configuration",
+                    "type": ""
+                }
+            ]
         }
     ]
 }
