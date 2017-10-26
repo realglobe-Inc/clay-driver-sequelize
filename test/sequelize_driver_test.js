@@ -543,9 +543,15 @@ describe('sequelize-driver', function () {
           await Promise.all(updateQueue)
           console.log(`Took ${new Date() - startAt}ms for ${NUMBER_OF_ENTITY} entities, ${NUMBER_OF_ATTRIBUTE} attributes to update`)
         }
+
       }
 
-      await driver.list('Box', {sort: [`attr-1`]})
+      {
+        console.time('list')
+        const listed = await driver.list('Box', {sort: [`attr-1`]})
+        console.log('listed', listed.meta.length)
+        console.timeEnd('list')
+      }
 
       // large data
       {
@@ -564,6 +570,7 @@ describe('sequelize-driver', function () {
           equal(one.payload.length, l)
         }
       }
+
     }
     await driver.close()
 
@@ -577,6 +584,8 @@ describe('sequelize-driver', function () {
       })
       await driver.list('Box', {filter: {[`attr-1`]: 'attr-1-1'}})
       await driver.list('Box', {sort: [`attr-1`]})
+
+      await driver.close()
     }
   })
 
