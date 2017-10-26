@@ -411,7 +411,7 @@ describe('sequelize-driver', function () {
     })
     await driver.drop('Box')
 
-    const NUMBER_OF_ENTITY = 50
+    const NUMBER_OF_ENTITY = 20
     const NUMBER_OF_ATTRIBUTE = 10
     const ids = []
 
@@ -548,8 +548,10 @@ describe('sequelize-driver', function () {
 
       {
         console.time('list')
-        const listed = await driver.list('Box', {sort: [`attr-1`]})
-        console.log('listed', listed.meta.length)
+        for (let i = 0; i < 10; i++) {
+          const listed = await driver.list('Box', {sort: [`attr-1`]})
+          equal(listed.meta.length, 100)
+        }
         console.timeEnd('list')
       }
 
