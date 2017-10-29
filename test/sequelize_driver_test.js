@@ -18,20 +18,21 @@ const rimraf = require('rimraf')
 
 describe('sequelize-driver', function () {
   this.timeout(80000)
-  let storage01 = `${__dirname}/../tmp/testing-driver.db`
-  let storage02 = `${__dirname}/../tmp/testing-driver-2.db`
-  let storage03 = `${__dirname}/../tmp/testing-driver-3.db`
-  let storage04 = `${__dirname}/../tmp/testing-driver-4.db`
-  let storage05 = `${__dirname}/../tmp/testing-driver-5.db`
-  let storage06 = `${__dirname}/../tmp/testing-driver-6.db`
-  let storage07 = `${__dirname}/../tmp/testing-driver-7.db`
-  let storage08 = `${__dirname}/../tmp/testing-driver-8.db`
-  let storage09 = `${__dirname}/../tmp/testing-driver-9.db`
-  let storage10 = `${__dirname}/../tmp/testing-driver-10.db`
-  let storage11 = `${__dirname}/../tmp/testing-driver-11.db`
-  let storage12 = `${__dirname}/../tmp/testing-driver-12.db`
-  let storage13 = `${__dirname}/../tmp/testing-driver-13.db`
-  let storage14 = `${__dirname}/../tmp/testing-driver-14.db`
+  const storage01 = `${__dirname}/../tmp/testing-driver.db`
+  const storage02 = `${__dirname}/../tmp/testing-driver-2.db`
+  const storage03 = `${__dirname}/../tmp/testing-driver-3.db`
+  const storage04 = `${__dirname}/../tmp/testing-driver-4.db`
+  const storage05 = `${__dirname}/../tmp/testing-driver-5.db`
+  const storage06 = `${__dirname}/../tmp/testing-driver-6.db`
+  const storage07 = `${__dirname}/../tmp/testing-driver-7.db`
+  const storage08 = `${__dirname}/../tmp/testing-driver-8.db`
+  const storage09 = `${__dirname}/../tmp/testing-driver-9.db`
+  const storage10 = `${__dirname}/../tmp/testing-driver-10.db`
+  const storage11 = `${__dirname}/../tmp/testing-driver-11.db`
+  const storage12 = `${__dirname}/../tmp/testing-driver-12.db`
+  const storage13 = `${__dirname}/../tmp/testing-driver-13.db`
+  const storage14 = `${__dirname}/../tmp/testing-driver-14.db`
+  const storage15 = `${__dirname}/../tmp/testing-driver-15.db`
 
   before(async () => {
     const storages = [
@@ -49,6 +50,7 @@ describe('sequelize-driver', function () {
       storage12,
       storage13,
       storage14,
+      storage15,
     ]
     for (let storage of storages) {
       rimraf.sync(storage)
@@ -733,6 +735,33 @@ describe('sequelize-driver', function () {
     deepEqual(user01.strings, ['a', 'b'])
     deepEqual(user02.strings, null)
     deepEqual(user01Updated.strings, ['c'])
+
+    await driver.close()
+  })
+
+  it('Array filter of ref', async () => {
+    const driver = new SequelizeDriver('hoge', '', '', {
+      storage: storage15,
+      dialect: 'sqlite',
+      benchmark: true,
+      logging: false
+    })
+
+    await driver.create('A', {
+      name: 'a01',
+      group: {$ref: 'Group#1'}
+    })
+    await driver.create('A', {
+      name: 'a02',
+      group: {$ref: 'Group#1'}
+    })
+
+    const list01 = (await driver.list('A', {
+      filter: {group: [{$ref: 'Group#1'}]}
+    })).entities
+    equal(list01.length, 2)
+
+    await driver.close()
   })
 })
 
