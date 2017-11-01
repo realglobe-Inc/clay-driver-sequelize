@@ -303,6 +303,9 @@ describe('sequelize-driver', function () {
       equal(org02Users.entities.length, 2)
       equal(org02Users.entities[1].name, 'user03')
       equal(org02Users.entities[1].org.$ref, `Org#${org02.id}`)
+
+      const org01And02Users = await driver.list('User', {filter: {org: [org01, org02]}})
+      equal(org01And02Users.entities.length, 3)
     }
 
     await driver.close()
