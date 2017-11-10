@@ -498,10 +498,23 @@ describe('sequelize-driver', function () {
     const driver = new SequelizeDriver(DATABASE, DB_ROOT_USER, DB_ROOT_PASSWORD, {
       dialect: 'mysql',
       benchmark: true,
-      // logging: console.log
-      logging: false
+      logging: console.log
+      // logging: false
     })
     await driver.drop('Box')
+
+    await Promise.all(
+      new Array(12).fill(null).map((_, i) => {
+        const attributes = Object.assign({},
+          ...new Array(4).fill(null).map((_, j) => ({
+              [`attr-${i}-${j}`]: [i, j].join('-')
+            })
+          ))
+        return driver.create('Box', attributes)
+      })
+    )
+    await driver.close()
+    return
 
     const NUMBER_OF_ENTITY = 100
     const NUMBER_OF_ATTRIBUTE = 20
