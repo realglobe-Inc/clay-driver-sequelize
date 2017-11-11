@@ -258,6 +258,7 @@ describe('sequelize-driver', function () {
     })
     let d = new Date()
     await driver.drop('Foo')
+    await asleep(10)
     let created = await driver.create('Foo', {
       bar: {
         b: false,
@@ -274,6 +275,7 @@ describe('sequelize-driver', function () {
     equal((await driver.list('Foo', {filter: {d}})).meta.length, 1)
 
     await driver.drop('Foo')
+    await asleep(10)
     {
       await driver.create('User', {
         name: 'user01',
@@ -294,7 +296,7 @@ describe('sequelize-driver', function () {
 
       await driver.drop('User')
     }
-
+    await asleep(10)
     {
       const org01 = await driver.create('Org', {name: 'org01'})
       const org02 = await driver.create('Org', {name: 'org02'})
@@ -316,11 +318,12 @@ describe('sequelize-driver', function () {
     }
 
     await driver.close()
+    await asleep(10)
   })
 
   it('Using operator', async () => {
     const driver = new SequelizeDriver('hoge', '', '', {
-      storage: storage05,
+      storage: storage06,
       dialect: 'sqlite',
       benchmark: true,
       logging: false,
