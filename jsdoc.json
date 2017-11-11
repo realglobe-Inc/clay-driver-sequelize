@@ -71,6 +71,18 @@
             }
         },
         {
+            "name": "lockModel",
+            "access": "",
+            "virtual": false,
+            "description": "Define lock model",
+            "parameters": [],
+            "examples": [],
+            "returns": {
+                "type": "Object",
+                "description": "Defined model"
+            }
+        },
+        {
             "name": "resourceModel",
             "access": "",
             "virtual": false,
