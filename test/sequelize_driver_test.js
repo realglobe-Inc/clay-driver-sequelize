@@ -249,6 +249,17 @@ describe('sequelize-driver', function () {
     }
   })
 
+  it('hoge', async () => {
+    const Sequelize = require('sequelize')
+    const db = new Sequelize('hoge', '', '', {
+      storage: storage05,
+      dialect: 'sqlite',
+      benchmark: true,
+      logging: false
+    })
+    await db.close()
+  })
+
   it('Nested attribute and refs', async () => {
     const driver = new SequelizeDriver('hoge', '', '', {
       storage: storage05,

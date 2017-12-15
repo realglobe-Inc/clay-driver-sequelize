@@ -40,7 +40,7 @@
     "msgpack": "^1.0.2",
     "objnest": "^4.0.0",
     "retry-as-promised": "^2.3.2",
-    "sequelize": "^4.28.1",
+    "sequelize": "4.28.0",
     "sg-queue": "^1.1.4",
     "stringcase": "^4.0.0"
   },
