@@ -251,12 +251,11 @@ describe('sequelize-driver', function () {
 
   it('hoge', async () => {
     const Sequelize = require('sequelize')
-    const db = new Sequelize('hoge', '', '', {
-      storage: storage05,
+    const db = new Sequelize('foo', '', '', {
+      storage: 'test-01.db',
       dialect: 'sqlite',
-      benchmark: true,
-      logging: false
     })
+    /* ... */
     await db.close()
   })
 
