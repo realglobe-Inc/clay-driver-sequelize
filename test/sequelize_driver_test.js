@@ -474,12 +474,12 @@ describe('sequelize-driver', function () {
   it('A lot of CRUD on mysql', async () => {
     async function resetMysqlDatabase (rootUsername, rootPassword, config = {}) {
       const escape = (value) => `${'\\`'}${value}${'\\`'}`
-      let {username, password, database, host = 'localhost'} = config
+      const {username, password, database, host = 'localhost'} = config
       rootUsername = rootUsername || config.rootUsername || 'root'
       rootPassword = rootPassword || config.rootPassword
-      let sql = `DROP DATABASE IF EXISTS ${database}; CREATE DATABASE IF NOT EXISTS ${database}; GRANT ALL ON ${escape(database)}.* TO '${username}'@'%' IDENTIFIED BY '${password}'`
-      let command = `mysql -u${rootUsername} --host=${host} ${host === 'localhost' ? '' : '--protocol=tcp '}-e"${sql}"`
-      let env = Object.assign({}, process.env)
+      const sql = `DROP DATABASE IF EXISTS ${database}; CREATE DATABASE IF NOT EXISTS ${database}; GRANT ALL ON ${escape(database)}.* TO '${username}'@'%' IDENTIFIED BY '${password}'`
+      const command = `mysql -u${rootUsername} --host=${host} ${host === 'localhost' ? '' : '--protocol=tcp '}-e"${sql}"`
+      const env = Object.assign({}, process.env)
       if (rootPassword) {
         env.MYSQL_PWD = rootPassword
       }
@@ -520,17 +520,15 @@ describe('sequelize-driver', function () {
       new Array(12).fill(null).map((_, i) => {
         const attributes = Object.assign({},
           ...new Array(4).fill(null).map((_, j) => ({
-              [`attr-${i}-${j}`]: [i, j].join('-')
+              [`attr-${i}-${j}`]: [i, j].join('-') + '😄'
             })
           ))
         return driver.create('Box', attributes)
       })
     )
-    await driver.close()
-    return
 
     const NUMBER_OF_ENTITY = 100
-    const NUMBER_OF_ATTRIBUTE = 20
+    const NUMBER_OF_ATTRIBUTE = 11
 
     for (let n = 0; n < 2; n++) {
       const ids = []
