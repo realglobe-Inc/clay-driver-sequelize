@@ -100,22 +100,22 @@ describe('sequelize-driver', function () {
 
     equal(created2.$$as, 'User')
     ok(created2.$$at)
-
+    await asleep(50)
     {
       const {entities} = await driver.list('User', {filter: {$$num: created3.$$num}})
       equal(entities.length, 1)
       equal(String(entities[0].id), String(created3.id))
     }
-
+    await asleep(50)
     {
       const {entities} = await driver.list('User', {sort: ['-$$at']})
       equal(entities.length, 3)
       equal(String(entities[0].id), String(created3.id))
       equal(String(entities[1].id), String(created2.id))
     }
-
+    await asleep(50)
     {
-      let list01 = await driver.list('User', {
+      const list01 = await driver.list('User', {
         filter: {}
       })
       equal(String(list01.entities[0].id), String(created.id))
@@ -123,31 +123,31 @@ describe('sequelize-driver', function () {
       ok(list01.entities[0].$$at)
       ok(list01.meta)
       deepEqual(list01.meta, {offset: 0, limit: 100, total: 3, length: 3})
-
-      let list02 = await driver.list('User', {
+      await asleep(50)
+      const list02 = await driver.list('User', {
         filter: {$or: [{username: 'okunishinishi'}]}
       })
       ok(list02.meta)
       deepEqual(list02.meta, {offset: 0, limit: 100, total: 1, length: 1})
 
-      let list03 = await driver.list('User', {
+      const list03 = await driver.list('User', {
         sort: ['birthday']
       })
       equal(list03.entities[0].username, 'foge')
-
-      let list04 = await driver.list('User', {
+      await asleep(50)
+      const list04 = await driver.list('User', {
         sort: ['-birthday'],
         page: {size: 2, number: 1}
       })
       equal(list04.entities[0].username, 'hoge')
       deepEqual(list04.meta, {offset: 0, limit: 2, total: 3, length: 2})
-
-      let list05 = await driver.list('User', {
+      await asleep(10)
+      const list05 = await driver.list('User', {
         filter: {'__unknown_column__': 0}
       })
       deepEqual(list05.meta, {offset: 0, limit: 100, total: 3, length: 3})
-
-      let list06 = await driver.list('User', {
+      await asleep(10)
+      const list06 = await driver.list('User', {
         filter: {id: created2.id}
       })
       deepEqual(list06.meta, {offset: 0, limit: 100, total: 1, length: 1})
