@@ -193,7 +193,8 @@ describe('sequelize-driver', function () {
       driver: new SequelizeDriver('hogehoge', '', '', {
         storage: storage03,
         dialect: 'sqlite',
-        logging: false
+        logging: false,
+        retry: {max: 10, match: ['SQLITE_BUSY: database is locked']},
       })
     })
     let User = lump.resource('user')
@@ -264,12 +265,13 @@ describe('sequelize-driver', function () {
       storage: storage05,
       dialect: 'sqlite',
       benchmark: true,
-      logging: false
+      logging: false,
+      retry: {max: 3, match: ['SQLITE_BUSY: database is locked']},
     })
-    let d = new Date()
+    const d = new Date()
     await driver.drop('Foo')
     await asleep(100)
-    let created = await driver.create('Foo', {
+    const created = await driver.create('Foo', {
       bar: {
         b: false,
         n: 1,
@@ -281,6 +283,8 @@ describe('sequelize-driver', function () {
     equal(typeof created.bar.n, 'number')
     equal(typeof created.bar.s, 'string')
     ok(created.d instanceof Date)
+
+    await asleep(100)
 
     equal((await driver.list('Foo', {filter: {d}})).meta.length, 1)
 
@@ -310,9 +314,14 @@ describe('sequelize-driver', function () {
     {
       const org01 = await driver.create('Org', {name: 'org01'})
       const org02 = await driver.create('Org', {name: 'org02'})
+
+      await asleep(10)
+
       const user01 = await driver.create('User', {name: 'user01', org: org01})
       const user02 = await driver.create('User', {name: 'user02', org: org02})
       const user03 = await driver.create('User', {name: 'user03', org: org02})
+
+      await asleep(10)
 
       const org01Users = await driver.list('User', {filter: {org: org01}})
       equal(org01Users.entities.length, 1)
@@ -323,12 +332,13 @@ describe('sequelize-driver', function () {
       equal(org02Users.entities[1].name, 'user03')
       equal(org02Users.entities[1].org.$ref, `Org#${org02.id}`)
 
+      await asleep(10)
+
       const org01And02Users = await driver.list('User', {filter: {org: [org01, org02]}})
       equal(org01And02Users.entities.length, 3)
     }
-
-    await driver.close()
     await asleep(100)
+    await driver.close()
   })
 
   it('Using operator', async () => {
