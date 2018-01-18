@@ -266,18 +266,20 @@ describe('sequelize-driver', function () {
       dialect: 'sqlite',
       benchmark: true,
       logging: false,
-      retry: {max: 3, match: ['SQLITE_BUSY: database is locked']},
+      retry: {max: 5, match: ['SQLITE_BUSY: database is locked']},
     })
     const d = new Date()
     await driver.drop('Foo')
     await asleep(100)
+
     const created = await driver.create('Foo', {
       bar: {
         b: false,
         n: 1,
         s: 'hoge',
       },
-      d
+      d,
+      'a.a.a': 'AAA'
     })
     equal(typeof created.bar.b, 'boolean')
     equal(typeof created.bar.n, 'number')
@@ -287,6 +289,8 @@ describe('sequelize-driver', function () {
     await asleep(100)
 
     equal((await driver.list('Foo', {filter: {d}})).meta.length, 1)
+    equal((await driver.list('Foo', {filter: {'a.a.a': 'AAA'}})).meta.length, 1)
+    equal((await driver.list('Foo', {filter: {'a.a.a': 'BBB'}})).meta.length, 0)
 
     await driver.drop('Foo')
     await asleep(100)
