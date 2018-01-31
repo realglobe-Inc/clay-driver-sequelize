@@ -33,6 +33,8 @@ describe('sequelize-driver', function () {
   const storage13 = `${__dirname}/../tmp/testing-driver-13.db`
   const storage14 = `${__dirname}/../tmp/testing-driver-14.db`
   const storage15 = `${__dirname}/../tmp/testing-driver-15.db`
+  const storage16 = `${__dirname}/../tmp/testing-driver-16.db`
+  const storage17 = `${__dirname}/../tmp/testing-driver-17.db`
 
   before(async () => {
     const storages = [
@@ -51,6 +53,8 @@ describe('sequelize-driver', function () {
       storage13,
       storage14,
       storage15,
+      storage16,
+      storage17,
     ]
     for (let storage of storages) {
       rimraf.sync(storage)
@@ -800,6 +804,24 @@ describe('sequelize-driver', function () {
     equal(list01.length, 2)
 
     await driver.close()
+  })
+
+  it('Support negative numbers', async () => {
+    const driver = new SequelizeDriver('hoge', '', '', {
+      storage: storage16,
+      dialect: 'sqlite',
+      benchmark: true,
+      logging: false
+    })
+
+    const created = await driver.create('A', {
+      v1: '1',
+      v2: '-1',
+      v3: 1,
+      v4: -1
+    })
+    equal(created.v3, 1)
+    equal(created.v4, -1)
   })
 })
 
