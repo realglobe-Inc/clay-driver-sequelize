@@ -88,7 +88,7 @@ describe('sequelize-driver', function () {
     const one = await driver.one('User', created.id)
     equal(String(one.id), String(created.id))
 
-    await asleep(10)
+    await asleep(50)
     const created2 = await driver.create('User', {
       username: 'hoge',
       birthday: new Date('1990/08/26')
@@ -308,6 +308,7 @@ describe('sequelize-driver', function () {
         org: {$ref: 'Org#2'}
       })
 
+      await asleep(100)
       let list = await driver.list('User', {
         filter: {
           org: {$ref: 'Org#2'}
@@ -323,24 +324,26 @@ describe('sequelize-driver', function () {
       const org01 = await driver.create('Org', {name: 'org01'})
       const org02 = await driver.create('Org', {name: 'org02'})
 
-      await asleep(10)
+      await asleep(50)
 
       const user01 = await driver.create('User', {name: 'user01', org: org01})
       const user02 = await driver.create('User', {name: 'user02', org: org02})
       const user03 = await driver.create('User', {name: 'user03', org: org02})
 
-      await asleep(10)
+      await asleep(50)
 
       const org01Users = await driver.list('User', {filter: {org: org01}})
       equal(org01Users.entities.length, 1)
       equal(org01Users.entities[0].name, 'user01')
+
+      await asleep(100)
 
       const org02Users = await driver.list('User', {filter: {org: org02}})
       equal(org02Users.entities.length, 2)
       equal(org02Users.entities[1].name, 'user03')
       equal(org02Users.entities[1].org.$ref, `Org#${org02.id}`)
 
-      await asleep(10)
+      await asleep(50)
 
       const org01And02Users = await driver.list('User', {filter: {org: [org01, org02]}})
       equal(org01And02Users.entities.length, 3)
