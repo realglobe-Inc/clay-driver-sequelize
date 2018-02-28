@@ -303,6 +303,7 @@ describe('sequelize-driver', function () {
         name: 'user01',
         org: {$ref: 'Org#1'}
       })
+      await asleep(100)
       await driver.create('User', {
         name: 'user02',
         org: {$ref: 'Org#2'}
@@ -316,7 +317,7 @@ describe('sequelize-driver', function () {
       })
       equal(list.meta.length, 1)
       equal(list.entities[0].name, 'user02')
-
+      await asleep(100)
       await driver.drop('User')
     }
     await asleep(100)
@@ -327,6 +328,7 @@ describe('sequelize-driver', function () {
       await asleep(50)
 
       const user01 = await driver.create('User', {name: 'user01', org: org01})
+      await asleep(100)
       const user02 = await driver.create('User', {name: 'user02', org: org02})
       const user03 = await driver.create('User', {name: 'user03', org: org02})
 
@@ -334,6 +336,7 @@ describe('sequelize-driver', function () {
 
       const org01Users = await driver.list('User', {filter: {org: org01}})
       equal(org01Users.entities.length, 1)
+      await asleep(100)
       equal(org01Users.entities[0].name, 'user01')
 
       await asleep(100)
