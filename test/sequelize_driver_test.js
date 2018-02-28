@@ -85,6 +85,7 @@ describe('sequelize-driver', function () {
     ok(created)
     ok(created.id)
     ok(created.$$num)
+    await asleep(50)
     const one = await driver.one('User', created.id)
     equal(String(one.id), String(created.id))
 
@@ -122,6 +123,7 @@ describe('sequelize-driver', function () {
       const list01 = await driver.list('User', {
         filter: {}
       })
+
       equal(String(list01.entities[0].id), String(created.id))
       equal(list01.entities[0].$$as, 'User')
       ok(list01.entities[0].$$at)
@@ -133,7 +135,7 @@ describe('sequelize-driver', function () {
       })
       ok(list02.meta)
       deepEqual(list02.meta, {offset: 0, limit: 100, total: 1, length: 1})
-
+      await asleep(150)
       const list03 = await driver.list('User', {
         sort: ['birthday']
       })
@@ -150,13 +152,13 @@ describe('sequelize-driver', function () {
         filter: {'__unknown_column__': 0}
       })
       deepEqual(list05.meta, {offset: 0, limit: 100, total: 3, length: 3})
-      await asleep(10)
+      await asleep(100)
       const list06 = await driver.list('User', {
         filter: {id: created2.id}
       })
       deepEqual(list06.meta, {offset: 0, limit: 100, total: 1, length: 1})
     }
-
+    await asleep(50)
     await driver.update('User', created2.id, {username: 'hogehoge'})
 
     {
@@ -164,7 +166,7 @@ describe('sequelize-driver', function () {
       ok(beforeDestroy)
       ok(beforeDestroy.$$num)
     }
-
+    await asleep(50)
     await driver.destroy('User', created3.id)
 
     {
