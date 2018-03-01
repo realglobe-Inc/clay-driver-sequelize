@@ -16,7 +16,7 @@ const mkdirp = require('mkdirp')
 const rimraf = require('rimraf')
 
 describe('sequelize-driver', function () {
-  this.timeout(80000)
+  this.timeout(180000)
   const storage01 = `${__dirname}/../tmp/testing-driver.db`
   const storage02 = `${__dirname}/../tmp/testing-driver-2.db`
   const storage03 = `${__dirname}/../tmp/testing-driver-3.db`
@@ -502,8 +502,8 @@ describe('sequelize-driver', function () {
     const driver = new SequelizeDriver(DATABASE, DB_ROOT_USER, DB_ROOT_PASSWORD, {
       dialect: 'mysql',
       benchmark: true,
-      logging: console.log
-      // logging: false
+      // logging: console.log
+      logging: false
     })
     await driver.drop('Box')
 
@@ -598,8 +598,8 @@ describe('sequelize-driver', function () {
       const driver = new SequelizeDriver(DATABASE, DB_ROOT_USER, DB_ROOT_PASSWORD, {
         dialect: 'mysql',
         benchmark: true,
-        logging: console.log
-        // logging: false
+        // logging: console.log
+        logging: false
       })
       await driver.list('Box', {filter: {[`attr-1`]: 'attr-1-1'}})
       await driver.list('Box', {sort: [`attr-1`]})
