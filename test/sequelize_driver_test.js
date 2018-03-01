@@ -12,7 +12,6 @@ const {ok, equal, deepEqual, strictEqual} = require('assert')
 const path = require('path')
 const {exec} = require('child_process')
 const fs = require('fs')
-const asleep = require('asleep')
 const mkdirp = require('mkdirp')
 const rimraf = require('rimraf')
 
@@ -85,17 +84,14 @@ describe('sequelize-driver', function () {
     ok(created)
     ok(created.id)
     ok(created.$$num)
-    await asleep(50)
     const one = await driver.one('User', created.id)
     equal(String(one.id), String(created.id))
 
-    await asleep(50)
     const created2 = await driver.create('User', {
       username: 'hoge',
       birthday: new Date('1990/08/26')
     })
 
-    await asleep(10)
     const created3 = await driver.create('User', {
       username: 'foge',
       birthday: new Date('1983/08/26')
@@ -105,20 +101,17 @@ describe('sequelize-driver', function () {
 
     equal(created2.$$as, 'User')
     ok(created2.$$at)
-    await asleep(50)
     {
       const {entities} = await driver.list('User', {filter: {$$num: created3.$$num}})
       equal(entities.length, 1)
       equal(String(entities[0].id), String(created3.id))
     }
-    await asleep(50)
     {
       const {entities} = await driver.list('User', {sort: ['-$$at']})
       equal(entities.length, 3)
       equal(String(entities[0].id), String(created3.id))
       equal(String(entities[1].id), String(created2.id))
     }
-    await asleep(50)
     {
       const list01 = await driver.list('User', {
         filter: {}
@@ -129,36 +122,30 @@ describe('sequelize-driver', function () {
       ok(list01.entities[0].$$at)
       ok(list01.meta)
       deepEqual(list01.meta, {offset: 0, limit: 100, total: 3, length: 3})
-      await asleep(50)
       const list02 = await driver.list('User', {
         filter: {$or: [{username: 'okunishinishi'}]}
       })
       ok(list02.meta)
       deepEqual(list02.meta, {offset: 0, limit: 100, total: 1, length: 1})
-      await asleep(150)
       const list03 = await driver.list('User', {
         sort: ['birthday']
       })
       equal(list03.entities[0].username, 'foge')
-      await asleep(50)
       const list04 = await driver.list('User', {
         sort: ['-birthday'],
         page: {size: 2, number: 1}
       })
       equal(list04.entities[0].username, 'hoge')
       deepEqual(list04.meta, {offset: 0, limit: 2, total: 3, length: 2})
-      await asleep(10)
       const list05 = await driver.list('User', {
         filter: {'__unknown_column__': 0}
       })
       deepEqual(list05.meta, {offset: 0, limit: 100, total: 3, length: 3})
-      await asleep(100)
       const list06 = await driver.list('User', {
         filter: {id: created2.id}
       })
       deepEqual(list06.meta, {offset: 0, limit: 100, total: 1, length: 1})
     }
-    await asleep(50)
     await driver.update('User', created2.id, {username: 'hogehoge'})
 
     {
@@ -166,7 +153,6 @@ describe('sequelize-driver', function () {
       ok(beforeDestroy)
       ok(beforeDestroy.$$num)
     }
-    await asleep(50)
     await driver.destroy('User', created3.id)
 
     {
@@ -276,7 +262,6 @@ describe('sequelize-driver', function () {
     })
     const d = new Date()
     await driver.drop('Foo')
-    await asleep(100)
 
     const created = await driver.create('Foo', {
       bar: {
@@ -292,26 +277,21 @@ describe('sequelize-driver', function () {
     equal(typeof created.bar.s, 'string')
     ok(created.d instanceof Date)
 
-    await asleep(100)
-
     equal((await driver.list('Foo', {filter: {d}})).meta.length, 1)
     equal((await driver.list('Foo', {filter: {'a.a.a': 'AAA'}})).meta.length, 1)
     equal((await driver.list('Foo', {filter: {'a.a.a': 'BBB'}})).meta.length, 0)
 
     await driver.drop('Foo')
-    await asleep(100)
     {
       await driver.create('User', {
         name: 'user01',
         org: {$ref: 'Org#1'}
       })
-      await asleep(100)
       await driver.create('User', {
         name: 'user02',
         org: {$ref: 'Org#2'}
       })
 
-      await asleep(100)
       let list = await driver.list('User', {
         filter: {
           org: {$ref: 'Org#2'}
@@ -319,41 +299,28 @@ describe('sequelize-driver', function () {
       })
       equal(list.meta.length, 1)
       equal(list.entities[0].name, 'user02')
-      await asleep(100)
       await driver.drop('User')
     }
-    await asleep(100)
     {
       const org01 = await driver.create('Org', {name: 'org01'})
       const org02 = await driver.create('Org', {name: 'org02'})
 
-      await asleep(50)
-
       const user01 = await driver.create('User', {name: 'user01', org: org01})
-      await asleep(100)
       const user02 = await driver.create('User', {name: 'user02', org: org02})
       const user03 = await driver.create('User', {name: 'user03', org: org02})
 
-      await asleep(50)
-
       const org01Users = await driver.list('User', {filter: {org: org01}})
       equal(org01Users.entities.length, 1)
-      await asleep(100)
       equal(org01Users.entities[0].name, 'user01')
-
-      await asleep(100)
 
       const org02Users = await driver.list('User', {filter: {org: org02}})
       equal(org02Users.entities.length, 2)
       equal(org02Users.entities[1].name, 'user03')
       equal(org02Users.entities[1].org.$ref, `Org#${org02.id}`)
 
-      await asleep(50)
-
       const org01And02Users = await driver.list('User', {filter: {org: [org01, org02]}})
       equal(org01And02Users.entities.length, 3)
     }
-    await asleep(100)
     await driver.close()
   })
 
@@ -490,10 +457,8 @@ describe('sequelize-driver', function () {
       await Promise.all(updateQueue)
       console.log(`Took ${new Date() - startAt}ms for ${NUMBER_OF_ENTITY} entities, ${NUMBER_OF_ATTRIBUTE} attributes to update`)
     }
-    asleep(100)
     await driver.close()
 
-    asleep(100)
     log.end()
   })
 
