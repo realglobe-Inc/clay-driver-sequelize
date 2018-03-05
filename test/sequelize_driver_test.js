@@ -12,6 +12,7 @@ const {ok, equal, deepEqual, strictEqual} = require('assert')
 const path = require('path')
 const {exec} = require('child_process')
 const fs = require('fs')
+const asleep = require('asleep')
 const mkdirp = require('mkdirp')
 const rimraf = require('rimraf')
 
@@ -301,6 +302,7 @@ describe('sequelize-driver', function () {
       equal(list.entities[0].name, 'user02')
       await driver.drop('User')
     }
+    await asleep(100)
     {
       const org01 = await driver.create('Org', {name: 'org01'})
       const org02 = await driver.create('Org', {name: 'org02'})
