@@ -22,27 +22,6 @@
             }
         },
         {
-            "name": "create",
-            "access": "",
-            "virtual": false,
-            "description": "Create driver instance",
-            "parameters": [
-                {
-                    "name": "args",
-                    "type": "*",
-                    "description": "",
-                    "default": "",
-                    "optional": "",
-                    "nullable": ""
-                }
-            ],
-            "examples": [],
-            "returns": {
-                "type": "SequelizeDriver",
-                "description": ""
-            }
-        },
-        {
             "name": "queuePool",
             "access": "",
             "virtual": false,
@@ -166,78 +145,6 @@
                 "examples": []
             },
             "properties": [
-                {
-                    "name": "config",
-                    "access": "",
-                    "virtual": false,
-                    "description": "Data base configuration",
-                    "type": ""
-                },
-                {
-                    "name": "config",
-                    "access": "",
-                    "virtual": false,
-                    "description": "Data base configuration",
-                    "type": ""
-                }
-            ]
-        },
-        {
-            "name": "SequelizeDriver",
-            "description": "",
-            "extends": [
-                "Driver"
-            ],
-            "access": "",
-            "virtual": false,
-            "fires": "",
-            "constructor": {
-                "name": "SequelizeDriver",
-                "description": "Abstract driver",
-                "parameters": [
-                    {
-                        "name": "database",
-                        "type": "string",
-                        "description": "Name of database",
-                        "default": "",
-                        "optional": "",
-                        "nullable": ""
-                    },
-                    {
-                        "name": "username",
-                        "type": "string",
-                        "description": "Database username",
-                        "default": "",
-                        "optional": "",
-                        "nullable": ""
-                    },
-                    {
-                        "name": "password",
-                        "type": "string",
-                        "description": "Database password",
-                        "default": "",
-                        "optional": "",
-                        "nullable": ""
-                    },
-                    {
-                        "name": "options",
-                        "type": "Object",
-                        "description": "Optional settings",
-                        "default": "{}",
-                        "optional": true,
-                        "nullable": ""
-                    }
-                ],
-                "examples": []
-            },
-            "properties": [
-                {
-                    "name": "config",
-                    "access": "",
-                    "virtual": false,
-                    "description": "Data base configuration",
-                    "type": ""
-                },
                 {
                     "name": "config",
                     "access": "",
