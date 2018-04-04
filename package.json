@@ -23,7 +23,9 @@
   },
   "homepage": "https://github.com/realglobe-Inc/clay-driver-sequelize#readme",
   "dependencies": {
+    "amkdirp": "^2.0.0",
     "asenv": "^2.0.2",
+    "asfs": "^2.0.2",
     "asleep": "^1.0.3",
     "asobj": "^2.1.0",
     "clay-collection": "^3.1.5",
