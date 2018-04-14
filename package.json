@@ -1,6 +1,6 @@
 {
   "name": "clay-driver-sequelize",
-  "version": "6.5.3",
+  "version": "6.5.4",
   "description": "Clay driver for Sequelize",
   "main": "lib",
   "browser": "ci/browser",
