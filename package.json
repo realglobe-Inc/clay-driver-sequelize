@@ -1,6 +1,6 @@
 {
   "name": "clay-driver-sequelize",
-  "version": "6.6.2",
+  "version": "6.6.3",
   "description": "Clay driver for Sequelize",
   "main": "lib",
   "browser": "ci/browser",
@@ -41,7 +41,6 @@
     "lru-cache": "^4.1.2",
     "msgpack": "^1.0.2",
     "objnest": "^4.1.2",
-    "retry-as-promised": "^3.0.0",
     "sequelize": "^4.37.6",
     "sg-queue": "^1.1.4",
     "stringcase": "^4.1.1",
