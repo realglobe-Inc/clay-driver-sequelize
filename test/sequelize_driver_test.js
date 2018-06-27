@@ -770,13 +770,21 @@ describe('sequelize-driver', function () {
     })
     await driver.create('A', {
       name: 'a02',
-      group: {$ref: 'Group#1'}
+      group: {$ref: 'Group#1'},
+    })
+    await driver.create('A', {
+      name: 'a03',
     })
 
     const list01 = (await driver.list('A', {
       filter: {group: [{$ref: 'Group#1'}]}
     })).entities
     equal(list01.length, 2)
+
+    equal(
+      (await driver.list('A', {filter: {group: null}})).entities.length,
+      0
+    )
 
     await driver.close()
   })
