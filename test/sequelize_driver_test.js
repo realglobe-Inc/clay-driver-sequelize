@@ -35,6 +35,7 @@ describe('sequelize-driver', function () {
   const storage15 = `${__dirname}/../tmp/testing-driver-15.db`
   const storage16 = `${__dirname}/../tmp/testing-driver-16.db`
   const storage17 = `${__dirname}/../tmp/testing-driver-17.db`
+  const storage18 = `${__dirname}/../tmp/testing-driver-18.db`
 
   before(async () => {
     const storages = [
@@ -55,6 +56,7 @@ describe('sequelize-driver', function () {
       storage15,
       storage16,
       storage17,
+      storage18,
     ]
     for (let storage of storages) {
       rimraf.sync(storage)
@@ -141,7 +143,7 @@ describe('sequelize-driver', function () {
       const list05 = await driver.list('User', {
         filter: {'__unknown_column__': 0}
       })
-      deepEqual(list05.meta, {offset: 0, limit: 100, total: 3, length: 3})
+      deepEqual(list05.meta, {offset: 0, limit: 100, total: 0, length: 0})
       const list06 = await driver.list('User', {
         filter: {id: created2.id}
       })
@@ -822,6 +824,24 @@ describe('sequelize-driver', function () {
     })
     const list = await driver.list('A', {filter: {at: {$gt: new Date('1999-01-01')}}})
     equal(list.meta.total, 2)
+  })
+
+  it('Empty filter', async () => {
+    const driver = new SequelizeDriver('hoge', '', '', {
+      storage: storage18,
+      dialect: 'sqlite',
+      benchmark: true,
+      logging: false
+    })
+    const a1 = await driver.create('A', {i: 1})
+    const a2 = await driver.create('A', {i: 2})
+    const b1 = await driver.create('B', {i: 1})
+
+    equal(
+      (await driver.list('A', {filter: {'b': b1, i: 1}})).entities.length,
+      0,
+    )
+    await driver.close()
   })
 })
 
