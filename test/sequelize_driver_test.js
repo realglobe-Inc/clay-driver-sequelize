@@ -788,6 +788,18 @@ describe('sequelize-driver', function () {
       0
     )
 
+    {
+      // equal(
+      //   (await driver.list('A', {filter: {name: {$like: '%03%'}}})).entities.length, 1
+      // )
+      // equal(
+      //   (await driver.list('A', {filter: {name: {$like: ['%03%']}}})).entities.length, 1
+      // )
+      equal(
+        (await driver.list('A', {filter: {name: [{$like: '%03%'}]}})).entities.length, 1
+      )
+    }
+
     await driver.close()
   })
 
