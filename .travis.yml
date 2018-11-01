@@ -1,4 +1,7 @@
 language: node_js
+services:
+- mysql
+
 compiler: gcc
 dist: trusty
 
