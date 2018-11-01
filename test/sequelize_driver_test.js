@@ -467,6 +467,11 @@ describe('sequelize-driver', function () {
   })
 
   it('A lot of CRUD on mysql', async () => {
+
+    if (process.CI) {
+      return // Skip on travis
+    }
+
     async function resetMysqlDatabase (rootUsername, rootPassword, config = {}) {
       const escape = (value) => `${'\\`'}${value}${'\\`'}`
       const { username, password, database, host = 'localhost' } = config
