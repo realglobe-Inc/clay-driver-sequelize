@@ -492,7 +492,7 @@ describe('sequelize-driver', function () {
     }
 
     const DB_ROOT_USER = 'root'
-    const DB_ROOT_PASSWORD = process.CI ? null : 'root'
+    const DB_ROOT_PASSWORD = 'root'
     const DB_USER = 'hoge'
     const DB_PASSWORD = 'fuge'
     const DATABASE = 'clay_driver_sequelize_test'
