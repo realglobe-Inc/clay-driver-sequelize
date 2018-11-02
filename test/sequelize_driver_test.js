@@ -468,7 +468,7 @@ describe('sequelize-driver', function () {
 
   it('A lot of CRUD on mysql', async () => {
 
-    if (process.CI) {
+    if (process.env.CI) {
       return // Skip on travis
     }
 
