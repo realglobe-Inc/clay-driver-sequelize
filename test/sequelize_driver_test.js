@@ -295,7 +295,7 @@ describe('sequelize-driver', function () {
         org: { $ref: 'Org#2' }
       })
 
-      let list = await driver.list('User', {
+      const list = await driver.list('User', {
         filter: {
           org: { $ref: 'Org#2' }
         }
